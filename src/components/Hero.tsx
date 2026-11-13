@@ -39,7 +39,7 @@ export default function Hero() {
               Kabinet
             </span>
             <h1 className="font-heading text-5xl sm:text-6xl md:text-7xl font-black tracking-tight leading-[0.88] mt-1.5">
-              <span className="inline-block bg-gradient-to-r from-[#e02432] via-[#ff4d5a] to-[#38bdf8] bg-clip-text text-transparent filter drop-shadow-md pb-1">
+              <span className="inline-block animate-nivara-gradient filter drop-shadow-md pb-1">
                 NIVARAMITRA
               </span>
             </h1>
@@ -119,7 +119,7 @@ export default function Hero() {
                 </span>
                 
                 <h1 className="font-heading text-6xl sm:text-7xl md:text-8xl lg:text-[90px] xl:text-[108px] font-black tracking-tight leading-[0.82] -mt-2 sm:-mt-3 md:-mt-4 lg:-mt-5 -ml-[4px] sm:-ml-[5px] lg:-ml-[6px] overflow-visible">
-                  <span className="inline-block bg-gradient-to-r from-[#e02432] via-[#ff4d5a] via-42% to-[#38bdf8] bg-clip-text text-transparent filter drop-shadow-md pr-8 pb-1">
+                  <span className="inline-block animate-nivara-gradient filter drop-shadow-md pr-8 pb-1">
                     NIVARAMITRA
                   </span>
                 </h1>

@@ -1261,7 +1261,7 @@ export default function KalenderContent() {
   }, [activeYearEvents, currentYear, searchQuery]);
 
   return (
-    <div className="relative isolate min-h-screen pt-28 pb-20 overflow-hidden bg-[#02121e] text-white">
+    <div className="relative isolate min-h-screen pt-20 sm:pt-24 pb-20 overflow-hidden bg-[#02121e] text-white">
       {/* Dynamic Animated Canvas Background */}
       <AnimatedBackground />
 

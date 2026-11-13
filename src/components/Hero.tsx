@@ -64,7 +64,7 @@ export default function Hero() {
             <LiquidGlassCard className="!rounded-2xl hover:scale-[1.02] active:scale-95 transition-transform w-full">
               <Link
                 href="/tentang"
-                className="flex items-center justify-center gap-2.5 px-7 py-3.5 text-white font-subheading text-sm sm:text-base font-bold tracking-wide group w-full"
+                className="flex items-center justify-center gap-2.5 px-7 py-[19px] text-white font-subheading text-sm sm:text-base font-bold tracking-wide group w-full"
               >
                 <span>Tentang Kami</span>
                 <ArrowRight className="w-4 h-4 text-[#ff4757] group-hover:translate-x-1 transition-transform" />

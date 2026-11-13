@@ -209,7 +209,7 @@ export default function TentangContent() {
                     <Hero3DFlame
                       modelPath="/assets/3d/logo-kabinet-ukm.glb"
                       heightClass="h-[260px] sm:h-[320px] lg:h-[360px]"
-                      scale={2.7}
+                      scale={3.4}
                       accent="flame"
                     />
                   </div>

@@ -54,7 +54,6 @@ export default function ProgramDetailModal({
   const schedule = "dateStr" in item ? item.dateStr : item.schedule;
   const location = "location" in item ? item.location : undefined;
   const target = "target" in item ? item.target : undefined;
-  const tags = "tags" in item ? item.tags : undefined;
   const category = "category" in item ? item.category : undefined;
 
   return (
@@ -67,7 +66,7 @@ export default function ProgramDetailModal({
 
       {/* Liquid Glass Modal Card (Mobile Sheet / Desktop Centered Card) */}
       <div
-        className="relative w-full max-w-2xl h-[85vh] sm:h-auto max-h-[90vh] sm:max-h-[85vh] rounded-t-3xl sm:rounded-3xl overflow-hidden p-5 sm:p-8 z-10 flex flex-col justify-between transition-all animate-in slide-in-from-bottom-6 sm:zoom-in-95 duration-200"
+        className="relative w-full max-w-2xl h-[42vh] sm:h-auto max-h-[90vh] sm:max-h-[85vh] rounded-t-3xl sm:rounded-3xl overflow-hidden p-5 sm:p-8 z-10 flex flex-col justify-between transition-all animate-in slide-in-from-bottom-6 sm:zoom-in-95 duration-200"
         style={{
           background:
             "linear-gradient(135deg, rgba(2, 32, 52, 0.97) 0%, rgba(1, 18, 30, 0.99) 100%)",
@@ -191,20 +190,6 @@ export default function ProgramDetailModal({
               {item.description}
             </p>
           </div>
-
-          {/* Tags if available */}
-          {tags && tags.length > 0 && (
-            <div className="flex flex-wrap items-center gap-1.5 pt-1">
-              {tags.map((tag, idx) => (
-                <span
-                  key={idx}
-                  className="text-[10px] font-subheading px-2.5 py-0.5 rounded-md bg-white/[0.05] text-white/70 border border-white/10"
-                >
-                  #{tag}
-                </span>
-              ))}
-            </div>
-          )}
         </div>
 
         {/* Footer Actions & Sequential Stepper */}

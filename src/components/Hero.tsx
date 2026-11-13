@@ -51,6 +51,7 @@ export default function Hero() {
             <Hero3DFlame 
               heightClass="h-[400px] sm:h-[520px]" 
               scale={3.7} 
+              autoRotate
             />
           </div>
 

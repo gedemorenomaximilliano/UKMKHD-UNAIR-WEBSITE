@@ -97,9 +97,6 @@ export default function ProgramDetailModal({
           {/* Modal Header */}
           <div className="space-y-2 pr-10">
             <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
-              <span className="px-2.5 py-0.5 rounded-full text-[11px] font-heading font-medium bg-white/10 text-white/90 border border-white/15">
-                {item.department}
-              </span>
               <span className="px-2.5 py-0.5 rounded-full text-[11px] font-subheading font-medium bg-white/10 text-[#8bd4ff] border border-white/10">
                 {item.division}
               </span>

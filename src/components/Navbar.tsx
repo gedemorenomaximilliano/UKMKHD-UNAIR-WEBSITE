@@ -143,9 +143,6 @@ export default function Navbar() {
                 <span className="font-heading text-xs font-bold tracking-wide text-white uppercase">
                   Menu Navigasi
                 </span>
-                <span className="font-subheading text-[10px] text-[#8bd4ff]">
-                  UKMKHD UNAIR 2026 · Nivaramitra
-                </span>
               </div>
               <button
                 onClick={() => setIsOpen(false)}

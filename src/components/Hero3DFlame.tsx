@@ -11,6 +11,7 @@ interface Hero3DFlameProps {
   heightClass?: string;
   scale?: number;
   accent?: "flame" | "ukm";
+  autoRotate?: boolean;
 }
 
 export default function Hero3DFlame({
@@ -18,6 +19,7 @@ export default function Hero3DFlame({
   heightClass = "h-[380px] sm:h-[430px] lg:h-[470px]",
   scale = 2.92,
   accent = "flame",
+  autoRotate = false,
 }: Hero3DFlameProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(true);
@@ -263,7 +265,10 @@ export default function Hero3DFlame({
       if (!isUserDragging) {
         currentRotY += (targetRotY - currentRotY) * 0.05;
         currentRotX += (targetRotX - currentRotX) * 0.05;
-        pivot.rotation.y = currentRotY;
+        // Optional gentle automatic side-to-side sway so the model never looks
+        // flat/static on touch devices that have no mouse parallax
+        const autoRotY = autoRotate ? Math.sin(elapsedTime * 0.8) * 0.25 : 0;
+        pivot.rotation.y = currentRotY + autoRotY;
         pivot.rotation.x = currentRotX;
       }
 
@@ -294,7 +299,7 @@ export default function Hero3DFlame({
         container.removeChild(renderer.domElement);
       }
     };
-  }, [modelPath, accent, scale]);
+  }, [modelPath, accent, scale, autoRotate]);
 
   return (
     <div

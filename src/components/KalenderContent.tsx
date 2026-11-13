@@ -1576,7 +1576,7 @@ export default function KalenderContent() {
                       <h2 className="font-heading text-xl sm:text-3xl font-extrabold text-white tracking-tight leading-none">
                         {MONTH_NAMES[currentMonth - 1]} {currentYear}
                       </h2>
-                      <span className="font-subheading text-[11px] sm:text-xs text-[#8bd4ff] font-medium block mt-1">
+                      <span className="hidden md:block font-subheading text-[11px] sm:text-xs text-[#8bd4ff] font-medium mt-1">
                         Penanggalan Hindu Dharma · {currentYear}
                       </span>
                     </div>

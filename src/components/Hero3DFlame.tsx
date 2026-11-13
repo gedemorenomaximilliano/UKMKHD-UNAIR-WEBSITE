@@ -36,16 +36,19 @@ export default function Hero3DFlame({
     // 1. Scene
     const scene = new THREE.Scene();
 
-    // 2. Camera: Positioned straight on Z axis with aspect-ratio adaptive distance based on scale
+    // 2. Camera: Positioned straight on Z axis with aspect-ratio adaptive distance
     const fov = 38;
     const fovRad = (fov * Math.PI) / 180;
     const halfFovTan = Math.tan(fovRad / 2);
 
+    // Base dimension for frustum calculation (3.8 allows scale=3.6 to fill ~95% of canvas cleanly)
+    const baseDim = 3.8;
+
     const computeZ = (w: number, h: number) => {
       const asp = w / h;
-      // Allow model to fill ~87% of view with comfortable clearance (zero clipping)
-      const reqZHeight = (scale * 1.15) / (2 * halfFovTan);
-      const reqZWidth = (scale * 1.15) / (2 * halfFovTan * asp);
+      const reqZHeight = baseDim / (2 * halfFovTan);
+      // Model width is ~0.865 of height; account for aspect ratio to prevent clipping
+      const reqZWidth = (baseDim * 0.88) / (2 * halfFovTan * asp);
       return Math.max(reqZHeight, reqZWidth);
     };
 

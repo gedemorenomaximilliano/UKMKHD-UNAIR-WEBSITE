@@ -67,7 +67,7 @@ export default function ProgramDetailModal({
 
       {/* Liquid Glass Modal Card (Mobile Sheet / Desktop Centered Card) */}
       <div
-        className="relative w-full max-w-2xl max-h-[90vh] sm:max-h-[85vh] rounded-t-3xl sm:rounded-3xl overflow-hidden p-5 sm:p-8 z-10 flex flex-col justify-between transition-all animate-in slide-in-from-bottom-6 sm:zoom-in-95 duration-200"
+        className="relative w-full max-w-2xl h-[85vh] sm:h-auto max-h-[90vh] sm:max-h-[85vh] rounded-t-3xl sm:rounded-3xl overflow-hidden p-5 sm:p-8 z-10 flex flex-col justify-between transition-all animate-in slide-in-from-bottom-6 sm:zoom-in-95 duration-200"
         style={{
           background:
             "linear-gradient(135deg, rgba(2, 32, 52, 0.97) 0%, rgba(1, 18, 30, 0.99) 100%)",

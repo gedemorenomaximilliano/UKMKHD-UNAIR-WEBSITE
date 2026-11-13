@@ -16,11 +16,20 @@ interface CorkboardTimelineProps {
   onSelectEvent: (event: TimelineEvent) => void;
 }
 
+// Mobile corkboard native canvas dimensions (see MOBILE_CONFIG coordinates below)
+const MOBILE_CANVAS_W = 354;
+const MOBILE_CANVAS_H = 1120;
+// Mobile board starts slightly zoomed out so the whole board fits comfortably on a phone
+const MOBILE_DEFAULT_ZOOM = 0.7;
+
 export default function CorkboardTimeline({ onSelectEvent }: CorkboardTimelineProps) {
   const [hoveredEventId, setHoveredEventId] = useState<string | null>(null);
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
-  // Default zoom set to 85% so all prokers are visible at once
-  const [zoomLevel, setZoomLevel] = useState<number>(0.85);
+  // Default zoom set to 80% so all prokers are visible at once
+  const [zoomLevel, setZoomLevel] = useState<number>(0.8);
+  // Mobile board has its own zoom level, independent from the desktop canvas
+  const [mobileZoom, setMobileZoom] = useState<number>(MOBILE_DEFAULT_ZOOM);
+  const [isMobile, setIsMobile] = useState<boolean>(false);
   const [viewMode, setViewMode] = useState<"corkboard" | "linear">("corkboard");
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -52,14 +61,23 @@ export default function CorkboardTimeline({ onSelectEvent }: CorkboardTimelinePr
     isDraggingRef.current = false;
   };
 
+  // Track whether the mobile corkboard (below the sm breakpoint) is the active view
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 639px)");
+    const update = () => setIsMobile(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
   // Auto-fit zoom on mount and window resize so all 9 timeline events are immediately visible
   useEffect(() => {
     const handleAutoFit = () => {
       if (!containerRef.current || viewMode !== "corkboard") return;
       const clientW = containerRef.current.clientWidth;
       if (clientW > 0) {
-        // Fits comfortably to container width (with padding buffer), capped between 0.65 and 0.88
-        const fitZoom = Math.min(0.85, Math.max(0.65, +((clientW - 40) / 1320).toFixed(2)));
+        // Fits comfortably to container width (with padding buffer), capped between 0.5 and 0.8
+        const fitZoom = Math.min(0.8, Math.max(0.5, +((clientW - 40) / 1320).toFixed(2)));
         setZoomLevel(fitZoom);
       }
     };
@@ -83,18 +101,26 @@ export default function CorkboardTimeline({ onSelectEvent }: CorkboardTimelinePr
   }, [viewMode, zoomLevel]);
 
   const handleZoom = (delta: number) => {
-    setZoomLevel((prev) => Math.min(1.2, Math.max(0.65, +(prev + delta).toFixed(2))));
+    if (isMobile) {
+      setMobileZoom((prev) => Math.min(1.1, Math.max(0.45, +(prev + delta).toFixed(2))));
+      return;
+    }
+    setZoomLevel((prev) => Math.min(1.2, Math.max(0.45, +(prev + delta).toFixed(2))));
   };
 
   const handleResetZoom = () => {
+    if (isMobile) {
+      setMobileZoom(MOBILE_DEFAULT_ZOOM);
+      return;
+    }
     if (containerRef.current) {
       const clientW = containerRef.current.clientWidth;
-      const fitZoom = Math.min(0.85, Math.max(0.65, +((clientW - 40) / 1320).toFixed(2)));
+      const fitZoom = Math.min(0.8, Math.max(0.5, +((clientW - 40) / 1320).toFixed(2)));
       setZoomLevel(fitZoom);
       containerRef.current.scrollLeft = 0;
       containerRef.current.scrollTop = 0;
     } else {
-      setZoomLevel(0.85);
+      setZoomLevel(0.8);
     }
   };
 
@@ -196,9 +222,9 @@ export default function CorkboardTimeline({ onSelectEvent }: CorkboardTimelinePr
           </button>
         </div>
 
-        {/* Right: Zoom Controls (Visible on Tablet/Desktop) */}
+        {/* Right: Zoom Controls (Visible on all screen sizes) */}
         {viewMode === "corkboard" && (
-          <div className="hidden sm:flex items-center gap-1 bg-[#021724]/80 p-1 rounded-xl border border-white/10">
+          <div className="flex items-center gap-1 bg-[#021724]/80 p-1 rounded-xl border border-white/10">
             <button
               onClick={() => handleZoom(-0.1)}
               className="p-1.5 rounded-lg text-white/70 hover:text-white hover:bg-white/10"
@@ -207,7 +233,7 @@ export default function CorkboardTimeline({ onSelectEvent }: CorkboardTimelinePr
               <ZoomOut className="w-4 h-4" />
             </button>
             <span className="text-[11px] font-subheading text-white/70 px-1 font-mono min-w-[38px] text-center">
-              {Math.round(zoomLevel * 100)}%
+              {Math.round((isMobile ? mobileZoom : zoomLevel) * 100)}%
             </span>
             <button
               onClick={() => handleZoom(0.1)}
@@ -219,7 +245,7 @@ export default function CorkboardTimeline({ onSelectEvent }: CorkboardTimelinePr
             <button
               onClick={handleResetZoom}
               className="p-1.5 rounded-lg text-white/70 hover:text-white hover:bg-white/10 ml-0.5"
-              title="Reset ke 85%"
+              title="Reset zoom"
             >
               <RotateCcw className="w-3.5 h-3.5" />
             </button>
@@ -257,9 +283,9 @@ export default function CorkboardTimeline({ onSelectEvent }: CorkboardTimelinePr
                 Fits 358px usable width with zero horizontal overflow
                 ======================================================== */}
             <div
-              className="sm:hidden w-full relative rounded-2xl overflow-hidden py-3 flex justify-center"
+              className="sm:hidden w-full relative rounded-2xl overflow-auto scrollbar-none"
               style={{
-                minHeight: "1150px",
+                height: `${Math.round(MOBILE_CANVAS_H * mobileZoom) + 24}px`,
                 backgroundColor: "#021320",
                 backgroundImage: `
                   radial-gradient(ellipse at center, rgba(3, 42, 68, 0.85) 0%, rgba(1, 15, 25, 0.98) 100%),
@@ -270,8 +296,23 @@ export default function CorkboardTimeline({ onSelectEvent }: CorkboardTimelinePr
                 boxShadow: "inset 0 2px 10px rgba(0, 0, 0, 0.85)",
               }}
             >
-              {/* Mobile Centered 354px Canvas with 1:1 Pixel Mapping */}
-              <div className="relative shrink-0" style={{ width: "354px", height: "1120px" }}>
+              {/* Scaled sizing wrapper: reserves the scaled footprint so the board can zoom */}
+              <div
+                className="relative shrink-0 mx-auto my-3"
+                style={{
+                  width: `${Math.round(MOBILE_CANVAS_W * mobileZoom)}px`,
+                  height: `${Math.round(MOBILE_CANVAS_H * mobileZoom)}px`,
+                }}
+              >
+              {/* Mobile Centered 354px Canvas with 1:1 Pixel Mapping (scaled by mobileZoom) */}
+              <div
+                className="absolute top-0 left-0 origin-top-left"
+                style={{
+                  width: `${MOBILE_CANVAS_W}px`,
+                  height: `${MOBILE_CANVAS_H}px`,
+                  transform: `scale(${mobileZoom})`,
+                }}
+              >
                 {/* Red Yarn SVG Network for Mobile */}
                 <svg
                   className="absolute inset-0 pointer-events-none z-10"
@@ -392,6 +433,7 @@ export default function CorkboardTimeline({ onSelectEvent }: CorkboardTimelinePr
                     </div>
                   );
                 })}
+              </div>
               </div>
             </div>
 

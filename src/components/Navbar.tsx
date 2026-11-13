@@ -132,13 +132,13 @@ export default function Navbar() {
 
           {/* Floating Glass Popup Card */}
           <div 
-            className="fixed top-16 right-4 left-4 sm:left-auto sm:right-6 sm:w-80 z-[9999999] rounded-3xl bg-[#021724]/95 backdrop-blur-2xl border border-white/20 p-4 space-y-2 animate-in fade-in zoom-in-95 duration-200"
+            className="fixed top-16 right-4 left-4 sm:left-auto sm:right-6 sm:w-80 z-[9999999] rounded-3xl bg-white/20 backdrop-blur-2xl backdrop-saturate-150 border border-white/25 p-4 space-y-2 animate-in fade-in zoom-in-95 duration-200"
             style={{
-              boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.85), inset 0 1px 1px rgba(255, 255, 255, 0.2)",
+              boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.7), inset 0 1px 1px rgba(255, 255, 255, 0.35)",
             }}
           >
             {/* Header of popup */}
-            <div className="flex items-center justify-between pb-2.5 border-b border-white/10">
+            <div className="flex items-center justify-between pb-2.5 border-b border-white/15">
               <div className="flex flex-col">
                 <span className="font-heading text-xs font-bold tracking-wide text-white uppercase">
                   Menu Navigasi
@@ -146,7 +146,7 @@ export default function Navbar() {
               </div>
               <button
                 onClick={() => setIsOpen(false)}
-                className="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 text-white/70 hover:text-white active:scale-90 transition-all"
+                className="w-8 h-8 flex items-center justify-center rounded-full bg-white/15 text-white/80 hover:bg-white/25 hover:text-white active:scale-90 transition-all"
                 aria-label="Tutup"
               >
                 <X className="w-4 h-4" />
@@ -163,7 +163,7 @@ export default function Navbar() {
                   className={`w-full px-4 py-3 rounded-2xl font-subheading text-sm font-semibold transition-all flex items-center justify-between active:scale-[0.98] ${
                     link.active
                       ? "bg-gradient-to-r from-[#c1111e] to-[#ff4757] text-white shadow-lg shadow-[#c1111e]/30 border border-[#ff8b94]/40"
-                      : "text-white/85 hover:bg-white/10 bg-white/[0.04] border border-white/10"
+                      : "text-white/90 hover:bg-white/15 bg-white/[0.08] border border-white/15"
                   }`}
                 >
                   <span>{link.name}</span>
@@ -177,8 +177,8 @@ export default function Navbar() {
             </div>
 
             {/* Compact Footer */}
-            <div className="pt-2 text-center border-t border-white/5">
-              <span className="text-[10px] font-subheading text-white/40">
+            <div className="pt-2 text-center border-t border-white/10">
+              <span className="text-[10px] font-subheading text-white/55">
                 Kabinet Nivaramitra Periode 2026
               </span>
             </div>

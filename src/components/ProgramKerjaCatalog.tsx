@@ -59,7 +59,7 @@ export default function ProgramKerjaCatalog({ onSelectProgram }: ProgramKerjaCat
       {/* ==============================================================
           SEARCH & FILTER TOOLBAR (Liquid Glass with High Stacking Context)
           ============================================================== */}
-      <div className="relative z-30 p-3.5 sm:p-5 rounded-2xl bg-white/[0.04] backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.25)] space-y-3.5 sm:space-y-4">
+      <div className="relative z-30 p-3.5 sm:p-5 rounded-2xl bg-white/10 backdrop-blur-2xl border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] space-y-3.5 sm:space-y-4">
         {/* Search Input Bar with 44px touch target */}
         <div className="relative">
           <Search className="w-4 h-4 text-white/40 absolute left-4 top-1/2 -translate-y-1/2" />
@@ -68,7 +68,7 @@ export default function ProgramKerjaCatalog({ onSelectProgram }: ProgramKerjaCat
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Cari program kerja (nama, divisi, kata kunci)..."
-            className="w-full pl-11 pr-10 py-3 sm:py-2.5 rounded-xl bg-[#021724]/90 text-white placeholder-white/40 border border-white/15 focus:outline-none focus:border-[#8bd4ff] focus:ring-1 focus:ring-[#8bd4ff]/30 text-xs sm:text-sm font-subheading transition-all"
+            className="w-full pl-11 pr-10 py-3 sm:py-2.5 rounded-xl bg-white/10 backdrop-blur-2xl text-white placeholder-white/50 border border-white/20 focus:outline-none focus:border-[#8bd4ff] focus:ring-1 focus:ring-[#8bd4ff]/30 text-xs sm:text-sm font-subheading transition-all"
           />
           {searchQuery && (
             <button
@@ -99,7 +99,7 @@ export default function ProgramKerjaCatalog({ onSelectProgram }: ProgramKerjaCat
             <button
               type="button"
               onClick={() => setOpenDropdown(openDropdown === "dept" ? null : "dept")}
-              className="w-full flex items-center justify-between pl-2 pr-1.5 py-2 rounded-xl bg-[#021827] border border-white/20 text-[11px] font-subheading font-medium text-white hover:bg-white/10 active:scale-95 transition-all truncate shadow-md"
+              className="w-full flex items-center justify-between pl-2 pr-1.5 py-2 rounded-xl bg-white/10 backdrop-blur-2xl border border-white/20 text-[11px] font-subheading font-medium text-white hover:bg-white/20 active:scale-95 transition-all truncate shadow-md"
             >
               <span className="truncate">
                 {selectedDept === "ALL"
@@ -118,7 +118,7 @@ export default function ProgramKerjaCatalog({ onSelectProgram }: ProgramKerjaCat
             </button>
 
             {openDropdown === "dept" && (
-              <div className="absolute top-full left-0 mt-1.5 w-48 rounded-2xl bg-[#021827] border border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.9)] z-50 p-1.5 space-y-1 animate-in fade-in zoom-in-95 duration-150">
+              <div className="absolute top-full left-0 mt-1.5 w-48 rounded-2xl bg-white/[0.14] backdrop-blur-2xl border border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.9)] z-50 p-1.5 space-y-1 animate-in fade-in zoom-in-95 duration-150">
                 {[
                   { id: "ALL", label: "Semua Dept" },
                   { id: "Proker Utama", label: "Proker Utama (2)" },
@@ -151,7 +151,7 @@ export default function ProgramKerjaCatalog({ onSelectProgram }: ProgramKerjaCat
             <button
               type="button"
               onClick={() => setOpenDropdown(openDropdown === "division" ? null : "division")}
-              className="w-full flex items-center justify-between pl-2 pr-1.5 py-2 rounded-xl bg-[#021827] border border-white/20 text-[11px] font-subheading font-medium text-white hover:bg-white/10 active:scale-95 transition-all truncate shadow-md"
+              className="w-full flex items-center justify-between pl-2 pr-1.5 py-2 rounded-xl bg-white/10 backdrop-blur-2xl border border-white/20 text-[11px] font-subheading font-medium text-white hover:bg-white/20 active:scale-95 transition-all truncate shadow-md"
             >
               <span className="truncate">
                 {selectedDivision === "ALL"
@@ -166,7 +166,7 @@ export default function ProgramKerjaCatalog({ onSelectProgram }: ProgramKerjaCat
             </button>
 
             {openDropdown === "division" && (
-              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1.5 w-52 rounded-2xl bg-[#021827] border border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.9)] z-50 p-1.5 max-h-60 overflow-y-auto scrollbar-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden space-y-1 animate-in fade-in zoom-in-95 duration-150">
+              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1.5 w-52 rounded-2xl bg-white/[0.14] backdrop-blur-2xl border border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.9)] z-50 p-1.5 max-h-60 overflow-y-auto scrollbar-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden space-y-1 animate-in fade-in zoom-in-95 duration-150">
                 <button
                   type="button"
                   onClick={() => {
@@ -209,7 +209,7 @@ export default function ProgramKerjaCatalog({ onSelectProgram }: ProgramKerjaCat
             <button
               type="button"
               onClick={() => setOpenDropdown(openDropdown === "type" ? null : "type")}
-              className="w-full flex items-center justify-between pl-2 pr-1.5 py-2 rounded-xl bg-[#021827] border border-white/20 text-[11px] font-subheading font-medium text-white hover:bg-white/10 active:scale-95 transition-all truncate shadow-md"
+              className="w-full flex items-center justify-between pl-2 pr-1.5 py-2 rounded-xl bg-white/10 backdrop-blur-2xl border border-white/20 text-[11px] font-subheading font-medium text-white hover:bg-white/20 active:scale-95 transition-all truncate shadow-md"
             >
               <span className="truncate">
                 {selectedType === "ALL" ? "Semua Tipe" : selectedType}
@@ -222,7 +222,7 @@ export default function ProgramKerjaCatalog({ onSelectProgram }: ProgramKerjaCat
             </button>
 
             {openDropdown === "type" && (
-              <div className="absolute top-full right-0 mt-1.5 w-44 rounded-2xl bg-[#021827] border border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.9)] z-50 p-1.5 space-y-1 animate-in fade-in zoom-in-95 duration-150">
+              <div className="absolute top-full right-0 mt-1.5 w-44 rounded-2xl bg-white/[0.14] backdrop-blur-2xl border border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.9)] z-50 p-1.5 space-y-1 animate-in fade-in zoom-in-95 duration-150">
                 {[
                   { id: "ALL", label: "Semua Tipe" },
                   { id: "Sekali Jalan", label: "Sekali Jalan" },
@@ -298,7 +298,7 @@ export default function ProgramKerjaCatalog({ onSelectProgram }: ProgramKerjaCat
             </div>
 
             {/* Type Filter */}
-            <div className="flex items-center gap-1 bg-[#021724]/90 p-1 rounded-xl border border-white/10 text-xs shrink-0">
+            <div className="flex items-center gap-1 bg-white/10 backdrop-blur-2xl p-1 rounded-xl border border-white/20 text-xs shrink-0">
               {[
                 { id: "ALL", label: "Semua Tipe" },
                 { id: "Sekali Jalan", label: "Sekali Jalan" },

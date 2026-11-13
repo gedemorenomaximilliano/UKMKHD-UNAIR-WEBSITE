@@ -195,7 +195,7 @@ export default function CorkboardTimeline({ onSelectEvent }: CorkboardTimelinePr
       {/* ==============================================================
           VIEW SWITCHER & ZOOM TOOLBAR (85% DEFAULT)
           ============================================================== */}
-      <div className="flex flex-wrap items-center justify-between gap-2.5 p-2 sm:p-2.5 rounded-2xl bg-white/[0.04] backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.25)]">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-2.5 p-2 sm:p-2.5 rounded-2xl bg-white/[0.04] backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.25)]">
         {/* Left: View Mode Toggle */}
         <div className="flex items-center gap-1.5 p-1 rounded-xl bg-[#021724]/80 border border-white/10">
           <button
@@ -224,27 +224,27 @@ export default function CorkboardTimeline({ onSelectEvent }: CorkboardTimelinePr
 
         {/* Right: Zoom Controls (Visible on all screen sizes) */}
         {viewMode === "corkboard" && (
-          <div className="flex items-center gap-1 bg-[#021724]/80 p-1 rounded-xl border border-white/10">
+          <div className="flex items-center gap-1.5 bg-white/10 backdrop-blur-2xl p-1.5 rounded-xl border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]">
             <button
               onClick={() => handleZoom(-0.1)}
-              className="p-1.5 rounded-lg text-white/70 hover:text-white hover:bg-white/10"
+              className="p-1.5 rounded-lg bg-white/10 border border-white/15 text-white/80 hover:text-white hover:bg-white/20 transition-colors"
               title="Perkecil"
             >
               <ZoomOut className="w-4 h-4" />
             </button>
-            <span className="text-[11px] font-subheading text-white/70 px-1 font-mono min-w-[38px] text-center">
+            <span className="text-[11px] font-subheading text-white/80 px-1 font-mono min-w-[38px] text-center">
               {Math.round((isMobile ? mobileZoom : zoomLevel) * 100)}%
             </span>
             <button
               onClick={() => handleZoom(0.1)}
-              className="p-1.5 rounded-lg text-white/70 hover:text-white hover:bg-white/10"
+              className="p-1.5 rounded-lg bg-white/10 border border-white/15 text-white/80 hover:text-white hover:bg-white/20 transition-colors"
               title="Perbesar"
             >
               <ZoomIn className="w-4 h-4" />
             </button>
             <button
               onClick={handleResetZoom}
-              className="p-1.5 rounded-lg text-white/70 hover:text-white hover:bg-white/10 ml-0.5"
+              className="p-1.5 rounded-lg bg-white/10 border border-white/15 text-white/80 hover:text-white hover:bg-white/20 transition-colors ml-0.5"
               title="Reset zoom"
             >
               <RotateCcw className="w-3.5 h-3.5" />

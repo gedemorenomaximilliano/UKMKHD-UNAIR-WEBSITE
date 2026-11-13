@@ -80,8 +80,8 @@ export default function Navbar() {
                 <span className="font-heading text-[15px] sm:text-base lg:text-lg font-bold tracking-tight text-white leading-tight">
                   UKMKHD
                 </span>
-                <span className="font-heading text-[15px] sm:text-base lg:text-lg font-bold tracking-tight text-white leading-tight">
-                  UNAIR
+                <span className="-mt-1 font-heading text-[15px] sm:text-base lg:text-lg font-bold tracking-tight text-white leading-tight">
+                  UNAIR 2026
                 </span>
               </div>
             </Link>

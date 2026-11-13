@@ -32,7 +32,7 @@ export default function Hero() {
             Wordmark -> 3D Flame -> Subtitle & CTA -> Micro-stats
             Grand, impactful size to eliminate empty dead space
             ============================================================ */}
-        <div className="flex lg:hidden flex-col items-center text-center space-y-4 pt-1 sm:pt-4">
+        <div className="flex lg:hidden flex-col items-center text-center space-y-2 pt-1 sm:pt-4">
           {/* Top Wordmark: Confident & Prominent */}
           <div className="flex flex-col items-center select-none">
             <span className="font-heading text-2xl sm:text-3xl font-extrabold tracking-tight text-white leading-none">
@@ -49,7 +49,7 @@ export default function Hero() {
           <div className="w-full max-w-[480px] relative flex items-center justify-center my-0">
             <div className="absolute w-[400px] sm:w-[500px] h-[400px] sm:h-[500px] bg-gradient-to-tr from-[#c1111e]/30 via-[#ff4d5a]/20 to-[#38bdf8]/30 rounded-full blur-[90px] pointer-events-none -z-10" />
             <Hero3DFlame 
-              heightClass="h-[460px] sm:h-[520px]" 
+              heightClass="h-[400px] sm:h-[520px]" 
               scale={3.7} 
             />
           </div>

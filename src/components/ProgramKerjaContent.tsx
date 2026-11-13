@@ -12,18 +12,18 @@ export default function ProgramKerjaContent() {
   const [selectedItem, setSelectedItem] = useState<ProgramKerja | TimelineEvent | null>(null);
 
   return (
-    <div className="relative isolate min-h-screen pt-20 sm:pt-24 lg:pt-28 pb-20 overflow-hidden bg-[#02121e] text-white">
+    <div className="relative isolate min-h-screen pt-16 sm:pt-18 lg:pt-20 pb-12 sm:pb-16 overflow-hidden bg-[#02121e] text-white">
       {/* Dynamic Animated Canvas Background */}
       <AnimatedBackground />
 
       {/* Main Container */}
-      <div className="max-w-7xl 2xl:max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-3.5 sm:space-y-6 lg:space-y-8">
+      <div className="max-w-7xl 2xl:max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-2.5 sm:space-y-3 lg:space-y-3.5">
         
         {/* ==============================================================
             THE MASTER TAB TOGGLE
             "Papan Timeline" & "Katalog Program"
             ============================================================== */}
-        <div className="flex justify-center pt-0 sm:pt-1">
+        <div className="flex justify-center">
           <div className="inline-flex p-1.5 rounded-full bg-white/[0.05] backdrop-blur-2xl border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]">
             {/* Toggle 1: Papan Timeline */}
             <button

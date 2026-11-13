@@ -191,7 +191,7 @@ export default function CorkboardTimeline({ onSelectEvent }: CorkboardTimelinePr
   };
 
   return (
-    <div className="w-full relative space-y-2.5 sm:space-y-4">
+    <div className="w-full relative space-y-2 sm:space-y-3">
       {/* ==============================================================
           VIEW SWITCHER & ZOOM TOOLBAR (85% DEFAULT)
           ============================================================== */}

@@ -85,7 +85,7 @@ export default function Hero() {
             </LiquidGlassCard>
 
             <LiquidGlassCard className="!rounded-xl p-2.5 text-center">
-              <span className="font-heading text-base font-bold text-[#ff4757] block">
+              <span className="font-heading text-base font-bold text-white block">
                 36
               </span>
               <span className="font-subheading text-[10px] font-medium text-[#8bd4ff] block">
@@ -158,7 +158,7 @@ export default function Hero() {
 
               <LiquidGlassCard className="!rounded-2xl p-4">
                 <div className="flex flex-col items-start">
-                  <span className="font-heading text-xl sm:text-2xl lg:text-3xl font-bold text-[#ff4757]">
+                  <span className="font-heading text-xl sm:text-2xl lg:text-3xl font-bold text-white">
                     36
                   </span>
                   <span className="font-subheading text-[11px] lg:text-xs font-medium text-[#8bd4ff]">

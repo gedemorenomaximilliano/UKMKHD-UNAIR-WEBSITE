@@ -110,6 +110,7 @@ export default function TentangContent() {
                       heightClass="h-[250px] sm:h-[300px] lg:h-[330px]"
                       scale={2.7}
                       accent="ukm"
+                      autoRotate
                     />
                   </div>
                   

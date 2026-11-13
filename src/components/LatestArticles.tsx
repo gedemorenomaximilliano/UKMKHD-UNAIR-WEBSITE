@@ -71,7 +71,7 @@ export default function LatestArticles() {
       <div className="absolute right-0 top-1/4 w-80 h-80 bg-[#8bd4ff]/10 rounded-full blur-3xl pointer-events-none -z-10" />
       <div className="absolute left-0 bottom-1/4 w-80 h-80 bg-[#f86b74]/10 rounded-full blur-3xl pointer-events-none -z-10" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-7xl 2xl:max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-14 gap-4">

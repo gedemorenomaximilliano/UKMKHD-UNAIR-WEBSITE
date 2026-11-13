@@ -34,7 +34,7 @@ export default function TentangContent() {
       <AnimatedBackground />
 
       {/* Main Content Container */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-7xl 2xl:max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* ==============================================================
             THE MASTER TOGGLE SWITCHER (True Liquid Glass Pill, Fully Rounded)
@@ -184,76 +184,6 @@ export default function TentangContent() {
                 </div>
               </div>
 
-            </div>
-
-            {/* Section 2: Filosofi & Makna Lambang UKMKHD (Icons above titles removed as requested) */}
-            <div className="pt-2">
-              <div className="text-center max-w-2xl mx-auto mb-10">
-                <span className="font-subheading text-xs font-bold text-[#8bd4ff] tracking-wider uppercase mb-2 block">
-                  Filosofi Visual
-                </span>
-                <h3 className="font-heading text-3xl sm:text-4xl font-extrabold text-white">
-                  Makna Lambang UKMKHD UNAIR
-                </h3>
-                <p className="font-subheading text-sm text-white/70 mt-2">
-                  Setiap guratan bentuk dan paduan warna pada lambang UKMKHD memiliki dasar filosofis yang mendalam.
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                
-                {/* 1. Bunga Teratai (Padma) - Icon removed */}
-                <LiquidGlassCard className="p-6 sm:p-7 flex flex-col justify-between">
-                  <div>
-                    <h4 className="font-heading text-xl sm:text-2xl font-bold text-white mb-2.5">
-                      Bunga Padma (Teratai)
-                    </h4>
-                    <p className="font-subheading text-xs sm:text-sm text-white/80 leading-relaxed">
-                      Melambangkan kesucian lahir dan batin, kejernihan budi pekerti, serta keteguhan iman spiritual yang senantiasa mekar anggun dan harum di tengah dinamika kehidupan duniawi.
-                    </p>
-                  </div>
-                  <div className="mt-6 pt-4 border-t border-white/10">
-                    <span className="text-xs font-subheading font-medium text-[#8bd4ff]">
-                      Simbol Kesucian & Keteguhan
-                    </span>
-                  </div>
-                </LiquidGlassCard>
-
-                {/* 2. Asta Dala - Icon removed */}
-                <LiquidGlassCard className="p-6 sm:p-7 flex flex-col justify-between">
-                  <div>
-                    <h4 className="font-heading text-xl sm:text-2xl font-bold text-white mb-2.5">
-                      Asta Dala (8 Penjuru)
-                    </h4>
-                    <p className="font-subheading text-xs sm:text-sm text-white/80 leading-relaxed">
-                      Delapan kelopak penjuru mata angin melambangkan kekuasaan dan bimbingan Ida Sang Hyang Widhi Wasa yang menaungi serta membimbing setiap gerak langkah pengabdian organisasi.
-                    </p>
-                  </div>
-                  <div className="mt-6 pt-4 border-t border-white/10">
-                    <span className="text-xs font-subheading font-medium text-[#ff8b94]">
-                      Perlindungan Semesta
-                    </span>
-                  </div>
-                </LiquidGlassCard>
-
-                {/* 3. Tri Warna - Icon removed */}
-                <LiquidGlassCard className="p-6 sm:p-7 flex flex-col justify-between">
-                  <div>
-                    <h4 className="font-heading text-xl sm:text-2xl font-bold text-white mb-2.5">
-                      Tri Datu / Tri Warna
-                    </h4>
-                    <p className="font-subheading text-xs sm:text-sm text-white/80 leading-relaxed">
-                      Paduan Merah (keberanian berkarya), Kuning Emas (keluhuran budi pekerti), dan Hitam (keteguhan tekad) merefleksikan keagungan manifestasi Tri Murti dalam menegakkan panji-panji Dharma.
-                    </p>
-                  </div>
-                  <div className="mt-6 pt-4 border-t border-white/10">
-                    <span className="text-xs font-subheading font-medium text-white/80">
-                      Keberanian, Kemuliaan, & Keteguhan
-                    </span>
-                  </div>
-                </LiquidGlassCard>
-
-              </div>
             </div>
 
           </div>

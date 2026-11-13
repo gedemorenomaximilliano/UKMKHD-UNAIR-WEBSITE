@@ -45,7 +45,7 @@ export default function IntroSection() {
         />
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-7xl 2xl:max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Intro Text Box - Maximum 2 Sentences as strictly required in the specification */}
         <div className="max-w-3xl mx-auto text-center mb-16">

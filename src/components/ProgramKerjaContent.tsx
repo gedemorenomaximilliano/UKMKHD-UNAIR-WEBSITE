@@ -17,7 +17,7 @@ export default function ProgramKerjaContent() {
       <AnimatedBackground />
 
       {/* Main Container */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-3.5 sm:space-y-6 lg:space-y-8">
+      <div className="max-w-7xl 2xl:max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-3.5 sm:space-y-6 lg:space-y-8">
         
         {/* ==============================================================
             THE MASTER TAB TOGGLE

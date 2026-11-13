@@ -1265,7 +1265,7 @@ export default function KalenderContent() {
       {/* Dynamic Animated Canvas Background */}
       <AnimatedBackground />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-7xl 2xl:max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* ==============================================================
             INTERACTIVE CONTROLS BAR: MONTH PAGER, YEAR SWITCHER & SMALL SEARCH BAR

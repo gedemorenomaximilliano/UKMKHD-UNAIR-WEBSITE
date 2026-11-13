@@ -21,6 +21,7 @@ export default function Hero3DFlame({
 }: Hero3DFlameProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(true);
+  const [isTouchActive, setIsTouchActive] = useState(false);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -35,12 +36,22 @@ export default function Hero3DFlame({
     // 1. Scene
     const scene = new THREE.Scene();
 
-    // 2. Camera: Positioned straight on Z axis with aspect-ratio adaptive distance
-    const baseZ = 4.92;
-    const modelAspect = 0.865;
+    // 2. Camera: Positioned straight on Z axis with aspect-ratio adaptive distance based on scale
+    const fov = 38;
+    const fovRad = (fov * Math.PI) / 180;
+    const halfFovTan = Math.tan(fovRad / 2);
+
+    const computeZ = (w: number, h: number) => {
+      const asp = w / h;
+      // Allow model to fill ~87% of view with comfortable clearance (zero clipping)
+      const reqZHeight = (scale * 1.15) / (2 * halfFovTan);
+      const reqZWidth = (scale * 1.15) / (2 * halfFovTan * asp);
+      return Math.max(reqZHeight, reqZWidth);
+    };
+
     const aspect = width / height;
-    const initialZ = baseZ * (aspect < modelAspect ? modelAspect / aspect : 1);
-    const camera = new THREE.PerspectiveCamera(38, aspect, 0.1, 100);
+    const initialZ = computeZ(width, height);
+    const camera = new THREE.PerspectiveCamera(fov, aspect, 0.1, 100);
     camera.position.set(0, 0, initialZ);
 
     // 3. WebGL Renderer
@@ -71,6 +82,12 @@ export default function Hero3DFlame({
     controls.maxPolarAngle = Math.PI * 0.56;
     controls.minAzimuthAngle = -Math.PI * 0.22;
     controls.maxAzimuthAngle = Math.PI * 0.22;
+
+    // On mobile devices, allow two fingers for 3D manipulation so 1 finger can scroll naturally
+    controls.touches = {
+      ONE: THREE.TOUCH.ROTATE,
+      TWO: THREE.TOUCH.DOLLY_PAN,
+    };
 
     // 5. Lighting Setup tailored to accent
     const ambientLight = new THREE.AmbientLight(0xffffff, accent === "ukm" ? 1.5 : 1.4);
@@ -214,8 +231,8 @@ export default function Hero3DFlame({
 
       const currentAspect = width / height;
       camera.aspect = currentAspect;
-      const targetZ = baseZ * (currentAspect < modelAspect ? modelAspect / currentAspect : 1);
-      camera.position.setLength(targetZ);
+      const targetZ = computeZ(width, height);
+      camera.position.set(0, 0, targetZ);
       camera.updateProjectionMatrix();
       controls.update();
 
@@ -278,12 +295,12 @@ export default function Hero3DFlame({
 
   return (
     <div
-      className={`relative w-full ${heightClass} flex items-center justify-center rounded-2xl overflow-hidden select-none cursor-grab active:cursor-grabbing`}
+      className={`relative w-full ${heightClass} flex items-center justify-center rounded-2xl overflow-hidden select-none`}
     >
       {/* Three.js Canvas Injection Container */}
       <div
         ref={containerRef}
-        className="w-full h-full flex items-center justify-center"
+        className="w-full h-full flex items-center justify-center touch-pan-y cursor-grab active:cursor-grabbing"
       />
 
       {/* Loading State Spinner */}

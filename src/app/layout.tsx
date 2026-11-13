@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import AssetLoadingScreen from "@/components/AssetLoadingScreen";
 
 export const metadata: Metadata = {
   title: "UKMKHD UNAIR · Kabinet Nivaramitra 2026",
@@ -38,6 +39,7 @@ export default function RootLayout({
         />
       </head>
       <body className="antialiased min-h-screen flex flex-col bg-[#02121e] text-white selection:bg-[#ff2035] selection:text-white">
+        <AssetLoadingScreen />
         {children}
       </body>
     </html>

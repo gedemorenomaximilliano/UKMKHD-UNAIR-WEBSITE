@@ -3,20 +3,35 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ArrowRight } from "lucide-react";
+import { createPortal } from "react-dom";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
+    setMounted(true);
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Lock body scroll when mobile menu is open to prevent background scrolling
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isOpen]);
 
   const navLinks = [
     { name: "Beranda", href: "/", active: pathname === "/" },
@@ -26,114 +41,154 @@ export default function Navbar() {
   ];
 
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? "py-2.5 bg-[#021724]/60 backdrop-blur-2xl backdrop-saturate-150 border-b border-white/15 shadow-[0_8px_32px_rgba(0,0,0,0.35)]"
-          : "py-3.5 bg-[#021724]/30 backdrop-blur-xl backdrop-saturate-150 border-b border-white/10 shadow-[0_4px_20px_rgba(0,0,0,0.2)]"
-      }`}
-      style={{
-        WebkitBackdropFilter: "blur(24px) saturate(140%)",
-      }}
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between">
-          
-          {/* Logo Brand Lockup: Clean, cropped square emblems with tight, close spacing */}
-          <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="flex items-center gap-1 sm:gap-1.5">
-              <img
-                src="/assets/logo/Logo-UNAIR-cropped.png"
-                alt="Logo Universitas Airlangga"
-                width={36}
-                height={36}
-                style={{ width: "36px", height: "36px", maxWidth: "36px", maxHeight: "36px" }}
-                className="h-8 sm:h-9 w-8 sm:w-9 object-contain filter drop-shadow-md transition-transform group-hover:scale-105"
-              />
-              <img
-                src="/assets/logo/Logo-UKMKHD-cropped.png"
-                alt="Logo UKMKHD"
-                width={36}
-                height={36}
-                style={{ width: "36px", height: "36px", maxWidth: "36px", maxHeight: "36px" }}
-                className="h-8 sm:h-9 w-8 sm:w-9 object-contain filter drop-shadow-md transition-transform group-hover:scale-105"
-              />
-              <img
-                src="/assets/logo/logo kabinet no text.png"
-                alt="Logo Kabinet Nivaramitra"
-                width={36}
-                height={36}
-                style={{ width: "36px", height: "36px", maxWidth: "36px", maxHeight: "36px" }}
-                className="h-8 sm:h-9 w-8 sm:w-9 object-contain filter drop-shadow-md transition-transform group-hover:scale-105"
-              />
-            </div>
+    <>
+      <header
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+          scrolled
+            ? "py-2 sm:py-2.5 bg-[#021724]/85 backdrop-blur-2xl backdrop-saturate-150 border-b border-white/15 shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
+            : "py-2.5 sm:py-3.5 bg-[#021724]/40 backdrop-blur-xl backdrop-saturate-150 border-b border-white/10 shadow-[0_4px_20px_rgba(0,0,0,0.2)]"
+        }`}
+        style={{
+          WebkitBackdropFilter: "blur(24px) saturate(140%)",
+          paddingTop: "calc(env(safe-area-inset-top, 0px) + 0.5rem)",
+        }}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between">
+            
+            {/* Logo Brand Lockup: Clean, cropped square emblems with tight, close spacing */}
+            <Link href="/" className="flex items-center gap-2 group" onClick={() => setIsOpen(false)}>
+              <div className="flex items-center gap-1 sm:gap-1.5">
+                <img
+                  src="/assets/logo/Logo-UNAIR-cropped.png"
+                  alt="Logo Universitas Airlangga"
+                  className="h-7 w-7 sm:h-8 sm:w-8 object-contain filter drop-shadow-md transition-transform group-hover:scale-105"
+                />
+                <img
+                  src="/assets/logo/Logo-UKMKHD-cropped.png"
+                  alt="Logo UKMKHD"
+                  className="h-7 w-7 sm:h-8 sm:w-8 object-contain filter drop-shadow-md transition-transform group-hover:scale-105"
+                />
+                <img
+                  src="/assets/logo/logo kabinet no text.png"
+                  alt="Logo Kabinet Nivaramitra"
+                  className="h-7 w-7 sm:h-8 sm:w-8 object-contain filter drop-shadow-md transition-transform group-hover:scale-105"
+                />
+              </div>
 
-            <div className="flex flex-col">
-              {/* 2026 is part of the UKMKHD UNAIR brand title */}
-              <span className="font-heading text-base sm:text-lg font-bold tracking-tight text-white leading-tight">
-                UKMKHD UNAIR 2026
-              </span>
-              <span className="font-subheading text-[10px] sm:text-[11px] font-medium text-[#8bd4ff] tracking-wide">
-                Kabinet Nivaramitra
-              </span>
-            </div>
-          </Link>
+              <div className="flex flex-col">
+                <span className="font-heading text-sm sm:text-base lg:text-lg font-bold tracking-tight text-white leading-tight">
+                  UKMKHD UNAIR 2026
+                </span>
+                <span className="font-subheading text-[9px] sm:text-[10px] lg:text-[11px] font-medium text-[#8bd4ff] tracking-wide">
+                  Kabinet Nivaramitra
+                </span>
+              </div>
+            </Link>
 
-          {/* Desktop Navigation Links */}
-          <nav className="hidden lg:flex items-center gap-1.5 bg-white/[0.07] backdrop-blur-2xl px-3 py-1.5 rounded-full border border-white/20 shadow-[inset_0_1px_2px_rgba(255,255,255,0.2)]">
-            {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                href={link.href}
-                className={`px-3.5 py-1.5 rounded-full text-xs font-subheading font-medium transition-all ${
-                  link.active
-                    ? "bg-[#c1111e] text-white shadow-md shadow-[#c1111e]/20"
-                    : "text-white/80 hover:text-white hover:bg-white/10"
-                }`}
+            {/* Desktop Navigation Links */}
+            <nav className="hidden lg:flex items-center gap-1.5 bg-white/[0.07] backdrop-blur-2xl px-3 py-1.5 rounded-full border border-white/20 shadow-[inset_0_1px_2px_rgba(255,255,255,0.2)]">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  className={`px-3.5 py-1.5 rounded-full text-xs font-subheading font-medium transition-all ${
+                    link.active
+                      ? "bg-[#c1111e] text-white shadow-md shadow-[#c1111e]/20"
+                      : "text-white/80 hover:text-white hover:bg-white/10"
+                  }`}
+                >
+                  {link.name}
+                </Link>
+              ))}
+            </nav>
+
+            {/* Mobile Hamburger Button with 44px hit target */}
+            <div className="flex lg:hidden items-center">
+              <button
+                onClick={() => setIsOpen(true)}
+                className="w-11 h-11 flex items-center justify-center rounded-xl bg-white/[0.08] backdrop-blur-xl border border-white/20 text-white hover:text-[#8bd4ff] active:scale-95 transition-all"
+                aria-label="Buka Menu Navigasi"
               >
-                {link.name}
-              </Link>
-            ))}
-          </nav>
+                <Menu className="w-5 h-5 transition-transform duration-200" />
+              </button>
+            </div>
 
-          {/* Mobile Hamburger Button */}
-          <div className="flex lg:hidden items-center">
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="p-2 rounded-xl bg-white/[0.08] backdrop-blur-xl border border-white/20 text-white hover:text-[#8bd4ff] transition-colors"
-              aria-label="Toggle Menu"
-            >
-              {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </button>
           </div>
-
         </div>
-      </div>
+      </header>
 
-      {/* Mobile Menu Dropdown */}
-      {isOpen && (
-        <div className="lg:hidden px-4 pt-3 pb-6 bg-[#021724]/80 backdrop-blur-2xl border-b border-white/15 shadow-2xl transition-all">
-          <div className="flex flex-col space-y-1.5 max-w-md mx-auto">
-            {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                href={link.href}
+      {/* ==============================================================
+          MOBILE FLOATING POPUP NAVIGATION MENU VIA REACT PORTAL
+          Sleek, rounded liquid glass popup card anchored under header
+          ============================================================== */}
+      {mounted && isOpen && createPortal(
+        <>
+          {/* Backdrop Overlay (closes popup on tap) */}
+          <div
+            onClick={() => setIsOpen(false)}
+            className="fixed inset-0 z-[9999990] bg-black/60 backdrop-blur-sm transition-opacity animate-in fade-in duration-200"
+          />
+
+          {/* Floating Glass Popup Card */}
+          <div 
+            className="fixed top-16 right-4 left-4 sm:left-auto sm:right-6 sm:w-80 z-[9999999] rounded-3xl bg-[#021724]/95 backdrop-blur-2xl border border-white/20 p-4 space-y-2 animate-in fade-in zoom-in-95 duration-200"
+            style={{
+              boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.85), inset 0 1px 1px rgba(255, 255, 255, 0.2)",
+            }}
+          >
+            {/* Header of popup */}
+            <div className="flex items-center justify-between pb-2.5 border-b border-white/10">
+              <div className="flex flex-col">
+                <span className="font-heading text-xs font-bold tracking-wide text-white uppercase">
+                  Menu Navigasi
+                </span>
+                <span className="font-subheading text-[10px] text-[#8bd4ff]">
+                  UKMKHD UNAIR 2026 · Nivaramitra
+                </span>
+              </div>
+              <button
                 onClick={() => setIsOpen(false)}
-                className={`px-4 py-2.5 rounded-xl font-subheading text-sm font-medium transition-all flex items-center justify-between ${
-                  link.active
-                    ? "bg-[#c1111e] text-white"
-                    : "text-white/85 hover:bg-white/10"
-                }`}
+                className="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 text-white/70 hover:text-white active:scale-90 transition-all"
+                aria-label="Tutup"
               >
-                <span>{link.name}</span>
-                {link.active && (
-                  <span className="w-2 h-2 rounded-full bg-white" />
-                )}
-              </Link>
-            ))}
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Navigation Links inside Popup */}
+            <div className="flex flex-col space-y-1.5 pt-1">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  onClick={() => setIsOpen(false)}
+                  className={`w-full px-4 py-3 rounded-2xl font-subheading text-sm font-semibold transition-all flex items-center justify-between active:scale-[0.98] ${
+                    link.active
+                      ? "bg-gradient-to-r from-[#c1111e] to-[#ff4757] text-white shadow-lg shadow-[#c1111e]/30 border border-[#ff8b94]/40"
+                      : "text-white/85 hover:bg-white/10 bg-white/[0.04] border border-white/10"
+                  }`}
+                >
+                  <span>{link.name}</span>
+                  {link.active ? (
+                    <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
+                  ) : (
+                    <ArrowRight className="w-3.5 h-3.5 text-white/40" />
+                  )}
+                </Link>
+              ))}
+            </div>
+
+            {/* Compact Footer */}
+            <div className="pt-2 text-center border-t border-white/5">
+              <span className="text-[10px] font-subheading text-white/40">
+                Kabinet Nivaramitra Periode 2026
+              </span>
+            </div>
           </div>
-        </div>
+        </>,
+        document.body
       )}
-    </header>
+    </>
   );
 }

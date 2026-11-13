@@ -132,12 +132,44 @@ export default function CorkboardTimeline({ onSelectEvent }: CorkboardTimelinePr
     return `M ${p1.x} ${p1.y} Q ${midX} ${midY} ${p2.x} ${p2.y}`;
   };
 
+  // Mobile serpentine corkboard coordinate matrix
+  const MOBILE_CONFIG: Record<
+    string,
+    { top: number; left: number; pinX: number; pinY: number; rotate: string }
+  > = {
+    "supermen-bali-2026": { top: 16, left: 10, pinX: 90, pinY: 16, rotate: "-1deg" },
+    "tirta-yatra": { top: 44, left: 184, pinX: 264, pinY: 44, rotate: "1deg" },
+    "ukmkhd-visit": { top: 246, left: 184, pinX: 264, pinY: 246, rotate: "-1.5deg" },
+    "bakti-sosial-2026": { top: 274, left: 10, pinX: 90, pinY: 274, rotate: "1.5deg" },
+    "display-ukm": { top: 476, left: 10, pinX: 90, pinY: 476, rotate: "-1deg" },
+    "jejak-ukmkhd": { top: 504, left: 184, pinX: 264, pinY: 504, rotate: "1.5deg" },
+    "mahabharata-2026": { top: 706, left: 184, pinX: 264, pinY: 706, rotate: "-1deg" },
+    "nirwana-2026": { top: 734, left: 10, pinX: 90, pinY: 734, rotate: "1deg" },
+    "suksesi-2026": { top: 934, left: 97, pinX: 177, pinY: 934, rotate: "0deg" },
+  };
+
+  const createMobileCurvedPath = (
+    p1: { pinX: number; pinY: number },
+    p2: { pinX: number; pinY: number }
+  ) => {
+    const dx = p2.pinX - p1.pinX;
+    const dy = p2.pinY - p1.pinY;
+    if (Math.abs(dx) > Math.abs(dy)) {
+      const midX = (p1.pinX + p2.pinX) / 2;
+      const midY = (p1.pinY + p2.pinY) / 2 + 18;
+      return `M ${p1.pinX} ${p1.pinY} Q ${midX} ${midY} ${p2.pinX} ${p2.pinY}`;
+    }
+    const midX = (p1.pinX + p2.pinX) / 2 + (p1.pinX > 180 ? 14 : -14);
+    const midY = (p1.pinY + p2.pinY) / 2;
+    return `M ${p1.pinX} ${p1.pinY} Q ${midX} ${midY} ${p2.pinX} ${p2.pinY}`;
+  };
+
   return (
-    <div className="w-full relative space-y-4">
+    <div className="w-full relative space-y-2.5 sm:space-y-4">
       {/* ==============================================================
           VIEW SWITCHER & ZOOM TOOLBAR (85% DEFAULT)
           ============================================================== */}
-      <div className="flex flex-wrap items-center justify-between gap-3 p-2.5 rounded-2xl bg-white/[0.04] backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.25)]">
+      <div className="flex flex-wrap items-center justify-between gap-2.5 p-2 sm:p-2.5 rounded-2xl bg-white/[0.04] backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.25)]">
         {/* Left: View Mode Toggle */}
         <div className="flex items-center gap-1.5 p-1 rounded-xl bg-[#021724]/80 border border-white/10">
           <button
@@ -164,9 +196,9 @@ export default function CorkboardTimeline({ onSelectEvent }: CorkboardTimelinePr
           </button>
         </div>
 
-        {/* Right: Zoom Controls */}
+        {/* Right: Zoom Controls (Visible on Tablet/Desktop) */}
         {viewMode === "corkboard" && (
-          <div className="flex items-center gap-1 bg-[#021724]/80 p-1 rounded-xl border border-white/10">
+          <div className="hidden sm:flex items-center gap-1 bg-[#021724]/80 p-1 rounded-xl border border-white/10">
             <button
               onClick={() => handleZoom(-0.1)}
               className="p-1.5 rounded-lg text-white/70 hover:text-white hover:bg-white/10"
@@ -203,7 +235,7 @@ export default function CorkboardTimeline({ onSelectEvent }: CorkboardTimelinePr
           
           {/* Outer Frame: Midnight Titanium Glass Frame */}
           <div
-            className="p-3 sm:p-5 relative"
+            className="p-2 sm:p-5 relative"
             style={{
               background:
                 "linear-gradient(135deg, rgba(2, 32, 53, 0.95) 0%, rgba(1, 20, 32, 0.98) 100%)",
@@ -212,17 +244,163 @@ export default function CorkboardTimeline({ onSelectEvent }: CorkboardTimelinePr
             }}
           >
             {/* Plaque: "Papan Timeline" */}
-            <div className="flex justify-center -mt-1 mb-2.5 relative z-20">
+            <div className="flex justify-center -mt-0.5 mb-1.5 sm:mb-2.5 relative z-20">
               <div className="inline-flex items-center justify-center px-6 py-1.5 rounded-full bg-white/[0.08] backdrop-blur-xl border border-white/20 shadow-md">
                 <span className="font-heading text-xs sm:text-sm font-bold tracking-wider text-white uppercase">
-                  Papan Timeline
+                  Papan Timeline 2026
                 </span>
               </div>
             </div>
 
-            {/* Canvas Viewport */}
+            {/* ========================================================
+                A. MOBILE 2-WIDE SERPENTINE CORKBOARD (sm:hidden)
+                Fits 358px usable width with zero horizontal overflow
+                ======================================================== */}
             <div
-              className="rounded-2xl p-1 relative overflow-hidden"
+              className="sm:hidden w-full relative rounded-2xl overflow-hidden py-3 flex justify-center"
+              style={{
+                minHeight: "1150px",
+                backgroundColor: "#021320",
+                backgroundImage: `
+                  radial-gradient(ellipse at center, rgba(3, 42, 68, 0.85) 0%, rgba(1, 15, 25, 0.98) 100%),
+                  radial-gradient(rgba(139, 212, 255, 0.12) 1px, transparent 1px)
+                `,
+                backgroundSize: "100% 100%, 36px 36px",
+                border: "1px solid rgba(255, 255, 255, 0.12)",
+                boxShadow: "inset 0 2px 10px rgba(0, 0, 0, 0.85)",
+              }}
+            >
+              {/* Mobile Centered 354px Canvas with 1:1 Pixel Mapping */}
+              <div className="relative shrink-0" style={{ width: "354px", height: "1120px" }}>
+                {/* Red Yarn SVG Network for Mobile */}
+                <svg
+                  className="absolute inset-0 pointer-events-none z-10"
+                  style={{ width: "354px", height: "1120px" }}
+                  viewBox="0 0 354 1120"
+                  preserveAspectRatio="none"
+                  fill="none"
+                >
+                  <defs>
+                    <filter id="mStringShadow" x="-10%" y="-10%" width="120%" height="120%">
+                      <feDropShadow dx="0" dy="2" stdDeviation="2" floodColor="#000000" floodOpacity="0.7" />
+                    </filter>
+                  </defs>
+
+                  {stringConnections.map(([idA, idB], idx) => {
+                    const cfgA = MOBILE_CONFIG[idA];
+                    const cfgB = MOBILE_CONFIG[idB];
+                    if (!cfgA || !cfgB) return null;
+
+                    const pathD = createMobileCurvedPath(cfgA, cfgB);
+
+                    return (
+                      <g key={`m-string-${idA}-${idB}-${idx}`}>
+                        <path
+                          d={pathD}
+                          stroke="rgba(0,0,0,0.6)"
+                          strokeWidth="3"
+                          fill="none"
+                          transform="translate(1, 2)"
+                        />
+                        <path
+                          d={pathD}
+                          stroke="#c1111e"
+                          strokeWidth="2.2"
+                          strokeLinecap="round"
+                          fill="none"
+                          filter="url(#mStringShadow)"
+                        />
+                        <path
+                          d={pathD}
+                          stroke="#ffa3a8"
+                          strokeWidth="0.6"
+                          strokeDasharray="4 6"
+                          fill="none"
+                          opacity={0.5}
+                        />
+                        <circle cx={cfgA.pinX} cy={cfgA.pinY} r="3" fill="#770101" stroke="#c1111e" strokeWidth="1" />
+                        <circle cx={cfgB.pinX} cy={cfgB.pinY} r="3" fill="#770101" stroke="#c1111e" strokeWidth="1" />
+                      </g>
+                    );
+                  })}
+                </svg>
+
+                {/* Mobile 9 Pinned Cards */}
+                {TIMELINE_EVENTS.map((event) => {
+                  const cfg = MOBILE_CONFIG[event.id];
+                  if (!cfg) return null;
+
+                  return (
+                    <div
+                      key={`m-card-${event.id}`}
+                      onClick={() => {
+                        setSelectedEventId(event.id);
+                        onSelectEvent(event);
+                      }}
+                      className="absolute cursor-pointer transition-all duration-200 active:scale-95 z-20"
+                      style={{
+                        top: `${cfg.top}px`,
+                        left: `${cfg.left}px`,
+                        width: "160px",
+                        transform: `rotate(${cfg.rotate})`,
+                        transformOrigin: "80px 0px",
+                      }}
+                    >
+                      {/* Pushpin at top center of card */}
+                      <div
+                        className="absolute pointer-events-none z-30"
+                        style={{
+                          left: "80px",
+                          top: "0px",
+                          transform: "translate(-50%, -50%)",
+                        }}
+                      >
+                        <div className="w-4 h-4 rounded-full bg-gradient-to-br from-[#ff4d5a] via-[#c1111e] to-[#770101] border border-white/60 shadow-md" />
+                      </div>
+
+                      {/* Card Content */}
+                      <div
+                        className="w-full pt-3.5 pb-2.5 px-3 rounded-2xl bg-white/[0.08] backdrop-blur-xl border border-white/20 shadow-lg text-left"
+                        style={{
+                          boxShadow: "0 10px 25px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.25)",
+                        }}
+                      >
+                        <div className="flex items-center justify-between border-b border-white/10 pb-1.5 mb-1.5">
+                          <span className="font-heading font-extrabold text-[10px] text-[#8bd4ff] uppercase tracking-tight">
+                            {event.badge || event.dateStr}
+                          </span>
+                          <span className="text-[9px] font-mono text-white/50 px-1 py-0.2 rounded bg-white/5">
+                            #{event.order}
+                          </span>
+                        </div>
+
+                        <h5 className="font-heading font-bold text-xs text-white leading-tight line-clamp-2">
+                          {event.title}
+                        </h5>
+
+                        <span className="text-[9px] font-subheading text-white/60 mt-1 line-clamp-1 block">
+                          {event.division}
+                        </span>
+
+                        <div className="pt-2 flex justify-end">
+                          <span className="text-[9px] font-subheading font-semibold text-[#8bd4ff] flex items-center gap-0.5">
+                            <span>Detail</span>
+                            <ArrowRight className="w-2.5 h-2.5" />
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* ========================================================
+                B. DESKTOP CORKBOARD CANVAS (hidden sm:block)
+                Original scalable canvas with zoom and pan
+                ======================================================== */}
+            <div
+              className="hidden sm:block rounded-2xl p-1 relative overflow-hidden"
               style={{
                 border: "1px solid rgba(255, 255, 255, 0.12)",
                 boxShadow: "inset 0 2px 10px rgba(0, 0, 0, 0.85)",
@@ -352,6 +530,7 @@ export default function CorkboardTimeline({ onSelectEvent }: CorkboardTimelinePr
                           left: `${event.x}%`,
                           top: `${event.y}%`,
                           transform: `rotate(${event.rotate}) ${isHovered ? "scale(1.06)" : ""}`,
+                          transformOrigin: `${event.pinOffset.x}px ${event.pinOffset.y}px`,
                         }}
                       >
                         {/* Red Pushpin */}

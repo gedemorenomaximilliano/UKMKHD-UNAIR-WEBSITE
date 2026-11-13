@@ -12,6 +12,7 @@ export interface TimelineEvent {
   location: string;
   x: number; // percentage (0 - 100)
   y: number; // percentage (0 - 100)
+  mobileCoords?: { x: number; y: number };
   pinOffset: { x: number; y: number };
   rotate: string;
   badge?: string;
@@ -50,6 +51,7 @@ export const TIMELINE_EVENTS: TimelineEvent[] = [
     location: "16 SMA/SMK di 6 Kab/Kota Bali (Denpasar, Badung, Buleleng, Tabanan, Gianyar, Klungkung)",
     x: 5,
     y: 10,
+    mobileCoords: { x: 4, y: 2 },
     pinOffset: { x: 112, y: 0 },
     rotate: "-1.5deg",
     tags: ["Roadshow", "Sosialisasi Kampus", "SMA Bali", "Eksternal"],
@@ -70,6 +72,7 @@ export const TIMELINE_EVENTS: TimelineEvent[] = [
     location: "Pura Vaikuntha Vyomantara & Pura Sanatanagama UGM, D.I. Yogyakarta",
     x: 28,
     y: 8,
+    mobileCoords: { x: 52, y: 4 },
     pinOffset: { x: 112, y: 0 },
     rotate: "1deg",
     tags: ["Spiritual", "Pura Yogyakarta", "Ziarah", "Kerohanian"],
@@ -90,6 +93,7 @@ export const TIMELINE_EVENTS: TimelineEvent[] = [
     location: "Gelanggang Inovasi dan Kreativitas (GIK) UGM, Yogyakarta",
     x: 51,
     y: 11,
+    mobileCoords: { x: 52, y: 23 },
     pinOffset: { x: 112, y: 0 },
     rotate: "-2deg",
     tags: ["Studi Banding", "KMHD UGM", "Yogyakarta", "Kolaborasi"],
@@ -110,6 +114,7 @@ export const TIMELINE_EVENTS: TimelineEvent[] = [
     location: "Griya Usia Lanjut Santo Yosef, Surabaya",
     x: 74,
     y: 8,
+    mobileCoords: { x: 4, y: 25 },
     pinOffset: { x: 112, y: 0 },
     rotate: "1.5deg",
     tags: ["Baksos", "Lansia", "Cek Kesehatan", "Pengabdian Masyarakat"],
@@ -130,6 +135,7 @@ export const TIMELINE_EVENTS: TimelineEvent[] = [
     location: "Student Center, Kampus C Universitas Airlangga",
     x: 76,
     y: 43,
+    mobileCoords: { x: 4, y: 46 },
     pinOffset: { x: 112, y: 0 },
     rotate: "-1deg",
     tags: ["Display", "Panca Tirta", "Showcase Tari", "Maba UNAIR"],
@@ -150,6 +156,7 @@ export const TIMELINE_EVENTS: TimelineEvent[] = [
     location: "Wantilan Pura Segara Kenjeran, Surabaya",
     x: 52,
     y: 45,
+    mobileCoords: { x: 52, y: 48 },
     pinOffset: { x: 112, y: 0 },
     rotate: "2deg",
     tags: ["Talkshow", "Mentorship Senior", "Maba 2026", "Keluarga"],
@@ -170,6 +177,7 @@ export const TIMELINE_EVENTS: TimelineEvent[] = [
     location: "Day 1 di Wantilan Pura Segara & Day 2 di AMEC Hall FK UNAIR Kampus A",
     x: 29,
     y: 43,
+    mobileCoords: { x: 52, y: 69 },
     pinOffset: { x: 112, y: 0 },
     rotate: "-1.5deg",
     tags: ["Kaderisasi", "Orientasi Maba", "Magang", "Personalia"],
@@ -190,6 +198,7 @@ export const TIMELINE_EVENTS: TimelineEvent[] = [
     location: "Pura Segara Kenjeran, Surabaya",
     x: 6,
     y: 46,
+    mobileCoords: { x: 4, y: 71 },
     pinOffset: { x: 112, y: 0 },
     rotate: "1deg",
     tags: ["Flagship Event", "Festival Nasional", "Pentas Budaya", "Nirwana"],
@@ -210,6 +219,7 @@ export const TIMELINE_EVENTS: TimelineEvent[] = [
     location: "Day 1 di Sekber PHDI Surabaya & Day 2 di Wantilan Dewa Ruci Pura Segara Kenjeran",
     x: 39,
     y: 73,
+    mobileCoords: { x: 26, y: 89 },
     pinOffset: { x: 112, y: 0 },
     rotate: "1.5deg",
     tags: ["Sidang LPJ", "Pemilihan Ketua", "AD/ART", "Regenerasi"],

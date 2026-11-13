@@ -7,6 +7,7 @@ import Hero3DFlame from "./Hero3DFlame";
 
 export default function TentangContent() {
   const [activeTab, setActiveTab] = useState<"ukm" | "kabinet">("ukm");
+  const [deptTab, setDeptTab] = useState<"internal" | "eksternal">("internal");
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -28,7 +29,7 @@ export default function TentangContent() {
   };
 
   return (
-    <div className="relative isolate min-h-screen pt-28 pb-20 overflow-hidden bg-[#02121e] text-white">
+    <div className="relative isolate min-h-screen pt-24 sm:pt-28 pb-16 sm:pb-20 overflow-hidden bg-[#02121e] text-white">
       {/* Dynamic Animated Canvas Background */}
       <AnimatedBackground />
 
@@ -39,45 +40,48 @@ export default function TentangContent() {
             THE MASTER TOGGLE SWITCHER (True Liquid Glass Pill, Fully Rounded)
             Strictly separates UKMKHD view from Kabinet view
             ============================================================== */}
-        <div className="flex justify-center mb-12 sm:mb-14">
-          <div className="inline-flex p-1.5 rounded-full bg-white/[0.05] backdrop-blur-2xl border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]">
+        <div className="flex justify-center mb-8 sm:mb-12">
+          <div className="inline-flex items-center p-1 sm:p-1.5 rounded-full bg-white/[0.05] backdrop-blur-2xl border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] max-w-full">
             
             {/* Toggle Button 1: UKMKHD UNAIR */}
             <button
               onClick={() => handleTabChange("ukm")}
-              className={`flex items-center gap-2.5 px-6 sm:px-7 py-2.5 rounded-full font-subheading text-xs sm:text-sm font-bold transition-all duration-300 ${
+              className={`flex-1 sm:flex-none flex items-center justify-center gap-1.5 sm:gap-2.5 px-3.5 sm:px-7 py-2.5 min-h-[44px] rounded-full font-subheading text-xs sm:text-sm font-bold transition-all duration-300 ${
                 activeTab === "ukm"
-                  ? "bg-gradient-to-r from-[#023048] to-[#034466] text-white shadow-lg border border-[#8bd4ff]/40 scale-[1.02]"
+                  ? "bg-gradient-to-r from-[#023048] to-[#034466] text-white shadow-lg border border-[#8bd4ff]/40"
                   : "text-white/60 hover:text-white hover:bg-white/10"
               }`}
             >
-              <div className="w-5 h-5 rounded-full bg-white/10 flex items-center justify-center overflow-hidden shrink-0">
+              <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-white/10 flex items-center justify-center overflow-hidden shrink-0">
                 <img
                   src="/assets/logo/Logo-UKMKHD-cropped.png"
                   alt="UKMKHD Icon"
                   className="w-3.5 h-3.5 object-contain"
                 />
               </div>
-              <span>UKMKHD UNAIR</span>
+              <span className="whitespace-nowrap">UKMKHD UNAIR</span>
             </button>
 
-            {/* Toggle Button 2: Kabinet Nivaramitra (Uses actual cabinet logo) */}
+            {/* Toggle Button 2: Kabinet Nivaramitra */}
             <button
               onClick={() => handleTabChange("kabinet")}
-              className={`flex items-center gap-2.5 px-6 sm:px-7 py-2.5 rounded-full font-subheading text-xs sm:text-sm font-bold transition-all duration-300 ${
+              className={`flex-1 sm:flex-none flex items-center justify-center gap-1.5 sm:gap-2.5 px-3.5 sm:px-7 py-2.5 min-h-[44px] rounded-full font-subheading text-xs sm:text-sm font-bold transition-all duration-300 ${
                 activeTab === "kabinet"
-                  ? "bg-gradient-to-r from-[#c1111e] via-[#e02432] to-[#ff4757] text-white shadow-lg border border-[#ff8b94]/40 scale-[1.02]"
+                  ? "bg-gradient-to-r from-[#c1111e] via-[#e02432] to-[#ff4757] text-white shadow-lg border border-[#ff8b94]/40"
                   : "text-white/60 hover:text-white hover:bg-white/10"
               }`}
             >
-              <div className="w-5 h-5 rounded-full bg-white/10 flex items-center justify-center overflow-hidden shrink-0">
+              <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-white/10 flex items-center justify-center overflow-hidden shrink-0">
                 <img
                   src="/assets/logo/logo kabinet no text.png"
                   alt="Kabinet Nivaramitra Logo"
                   className="w-3.5 h-3.5 object-contain"
                 />
               </div>
-              <span>Kabinet Nivaramitra</span>
+              <span className="whitespace-nowrap">
+                <span className="inline sm:hidden">Nivaramitra</span>
+                <span className="hidden sm:inline">Kabinet Nivaramitra</span>
+              </span>
             </button>
 
           </div>
@@ -100,11 +104,11 @@ export default function TentangContent() {
                   contentClassName="h-full flex flex-col justify-between"
                 >
                   {/* 3D Model Display */}
-                  <div className="w-full flex-1 flex items-center justify-center min-h-[290px]">
+                  <div className="w-full flex-1 flex items-center justify-center min-h-[250px] sm:min-h-[290px]">
                     <Hero3DFlame
                       modelPath="/assets/3d/logo-ukm.glb?v=2"
-                      heightClass="h-[300px] sm:h-[330px]"
-                      scale={2.85}
+                      heightClass="h-[250px] sm:h-[300px] lg:h-[330px]"
+                      scale={2.7}
                       accent="ukm"
                     />
                   </div>
@@ -271,11 +275,11 @@ export default function TentangContent() {
                   className="p-5 sm:p-6 w-full max-w-md lg:max-w-none text-center shadow-2xl h-full"
                   contentClassName="h-full flex flex-col justify-between"
                 >
-                  <div className="w-full flex-1 flex items-center justify-center min-h-[300px]">
+                  <div className="w-full flex-1 flex items-center justify-center min-h-[250px] sm:min-h-[300px]">
                     <Hero3DFlame
                       modelPath="/assets/3d/logo-kabinet-ukm.glb"
-                      heightClass="h-[320px] sm:h-[360px]"
-                      scale={2.85}
+                      heightClass="h-[260px] sm:h-[320px] lg:h-[360px]"
+                      scale={2.7}
                       accent="flame"
                     />
                   </div>
@@ -478,7 +482,7 @@ export default function TentangContent() {
 
             {/* Section 4: STRUKTUR ORGANISASI */}
             <div className="pt-4">
-              <div className="text-center max-w-xl mx-auto mb-8">
+              <div className="text-center max-w-xl mx-auto mb-6 sm:mb-8">
                 <span className="font-subheading text-xs font-bold text-[#ff4757] tracking-wider uppercase mb-1 block">
                   Struktur Kepengurusan
                 </span>
@@ -490,97 +494,127 @@ export default function TentangContent() {
                 </p>
               </div>
 
+              {/* Mobile Department Switcher Segmented Pill (< lg) */}
+              <div className="flex lg:hidden justify-center mb-6">
+                <div className="inline-flex p-1 rounded-full bg-white/[0.06] backdrop-blur-xl border border-white/15 shadow-md">
+                  <button
+                    onClick={() => setDeptTab("internal")}
+                    className={`px-4 py-2 rounded-full text-xs font-subheading font-bold active:scale-95 transition-all ${
+                      deptTab === "internal"
+                        ? "bg-gradient-to-r from-[#023048] to-[#034466] text-white border border-[#8bd4ff]/30 shadow-md"
+                        : "text-white/60 hover:text-white"
+                    }`}
+                  >
+                    Internal (4 Divisi)
+                  </button>
+                  <button
+                    onClick={() => setDeptTab("eksternal")}
+                    className={`px-4 py-2 rounded-full text-xs font-subheading font-bold active:scale-95 transition-all ${
+                      deptTab === "eksternal"
+                        ? "bg-gradient-to-r from-[#c1111e] to-[#ff4757] text-white border border-[#ff8b94]/30 shadow-md"
+                        : "text-white/60 hover:text-white"
+                    }`}
+                  >
+                    Eksternal (3 Divisi)
+                  </button>
+                </div>
+              </div>
+
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 
                 {/* Departemen Internal */}
-                <LiquidGlassCard className="p-6 sm:p-7 flex flex-col justify-between">
-                  <div>
-                    <div className="flex items-center justify-between pb-4 mb-5 border-b border-white/10">
-                      <h4 className="font-heading text-xl sm:text-2xl font-black text-white">
-                        Departemen Internal
-                      </h4>
-                      <span className="text-xs font-subheading text-white/50 font-medium">
-                        4 Divisi
-                      </span>
-                    </div>
+                <div className={`${deptTab === "internal" ? "block" : "hidden"} lg:block`}>
+                  <LiquidGlassCard className="p-5 sm:p-7 flex flex-col justify-between h-full">
+                    <div>
+                      <div className="flex items-center justify-between pb-4 mb-5 border-b border-white/10">
+                        <h4 className="font-heading text-xl sm:text-2xl font-black text-white">
+                          Departemen Internal
+                        </h4>
+                        <span className="text-xs font-subheading text-[#8bd4ff] font-medium">
+                          4 Divisi
+                        </span>
+                      </div>
 
-                    <div className="space-y-3">
-                      {[
-                        {
-                          name: "Divisi Personalia",
-                          desc: "Kaderisasi terarah, pengembangan kapasitas insani, serta tata kelola dinamika internal keorganisasian.",
-                        },
-                        {
-                          name: "Divisi Minat dan Bakat",
-                          desc: "Wadah pengembangan minat, bakat seni, budaya, olahraga, dan kreativitas mahasiswa Hindu.",
-                        },
-                        {
-                          name: "Divisi Kerohanian",
-                          desc: "Penyelenggaraan persembahyangan berkala, kajian Dharma, dan pembinaan spiritual keagamaan.",
-                        },
-                        {
-                          name: "Divisi Ikatan Keluarga",
-                          desc: "Mempererat tali kekeluargaan, ruang afeksi, dan keharmonisan hubungan antarseluruh civitas UKMKHD.",
-                        },
-                      ].map((divisi, idx) => (
-                        <div
-                          key={idx}
-                          className="p-3.5 sm:p-4 rounded-xl bg-white/[0.04] border border-white/10 hover:border-white/25 hover:bg-white/[0.07] transition-all"
-                        >
-                          <h5 className="font-heading text-sm sm:text-base font-bold text-white">
-                            {divisi.name}
-                          </h5>
-                          <p className="font-subheading text-xs sm:text-[13px] text-white/70 mt-1 leading-relaxed">
-                            {divisi.desc}
-                          </p>
-                        </div>
-                      ))}
+                      <div className="space-y-3">
+                        {[
+                          {
+                            name: "Divisi Personalia",
+                            desc: "Kaderisasi terarah, pengembangan kapasitas insani, serta tata kelola dinamika internal keorganisasian.",
+                          },
+                          {
+                            name: "Divisi Minat dan Bakat",
+                            desc: "Wadah pengembangan minat, bakat seni, budaya, olahraga, dan kreativitas mahasiswa Hindu.",
+                          },
+                          {
+                            name: "Divisi Kerohanian",
+                            desc: "Penyelenggaraan persembahyangan berkala, kajian Dharma, dan pembinaan spiritual keagamaan.",
+                          },
+                          {
+                            name: "Divisi Ikatan Keluarga",
+                            desc: "Mempererat tali kekeluargaan, ruang afeksi, dan keharmonisan hubungan antarseluruh civitas UKMKHD.",
+                          },
+                        ].map((divisi, idx) => (
+                          <div
+                            key={idx}
+                            className="p-3.5 sm:p-4 rounded-xl bg-white/[0.04] border border-white/10 hover:border-white/25 hover:bg-white/[0.07] transition-all"
+                          >
+                            <h5 className="font-heading text-sm sm:text-base font-bold text-white">
+                              {divisi.name}
+                            </h5>
+                            <p className="font-subheading text-xs sm:text-[13px] text-white/70 mt-1 leading-relaxed">
+                              {divisi.desc}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                </LiquidGlassCard>
+                  </LiquidGlassCard>
+                </div>
 
                 {/* Departemen Eksternal */}
-                <LiquidGlassCard className="p-6 sm:p-7 flex flex-col justify-between">
-                  <div>
-                    <div className="flex items-center justify-between pb-4 mb-5 border-b border-white/10">
-                      <h4 className="font-heading text-xl sm:text-2xl font-black text-white">
-                        Departemen Eksternal
-                      </h4>
-                      <span className="text-xs font-subheading text-white/50 font-medium">
-                        3 Divisi
-                      </span>
-                    </div>
+                <div className={`${deptTab === "eksternal" ? "block" : "hidden"} lg:block`}>
+                  <LiquidGlassCard className="p-5 sm:p-7 flex flex-col justify-between h-full">
+                    <div>
+                      <div className="flex items-center justify-between pb-4 mb-5 border-b border-white/10">
+                        <h4 className="font-heading text-xl sm:text-2xl font-black text-white">
+                          Departemen Eksternal
+                        </h4>
+                        <span className="text-xs font-subheading text-[#ff8b94] font-medium">
+                          3 Divisi
+                        </span>
+                      </div>
 
-                    <div className="space-y-3">
-                      {[
-                        {
-                          name: "Divisi Hubungan dan Pengabdian Masyarakat",
-                          desc: "Membangun jejaring kolaborasi lintas organisasi/kampus serta melaksanakan pengabdian masyarakat nyata.",
-                        },
-                        {
-                          name: "Divisi Media Kreatif",
-                          desc: "Publikasi informasi resmi, perancangan visual branding, pengelolaan media sosial, dan dokumentasi.",
-                        },
-                        {
-                          name: "Divisi Sponsor dan Dana Usaha",
-                          desc: "Kemandirian finansial organisasi melalui kemitraan sponsorship, merchandise, dan wirausaha kreatif.",
-                        },
-                      ].map((divisi, idx) => (
-                        <div
-                          key={idx}
-                          className="p-3.5 sm:p-4 rounded-xl bg-white/[0.04] border border-white/10 hover:border-white/25 hover:bg-white/[0.07] transition-all"
-                        >
-                          <h5 className="font-heading text-sm sm:text-base font-bold text-white">
-                            {divisi.name}
-                          </h5>
-                          <p className="font-subheading text-xs sm:text-[13px] text-white/70 mt-1 leading-relaxed">
-                            {divisi.desc}
-                          </p>
-                        </div>
-                      ))}
+                      <div className="space-y-3">
+                        {[
+                          {
+                            name: "Divisi Hubungan dan Pengabdian Masyarakat",
+                            desc: "Membangun jejaring kolaborasi lintas organisasi/kampus serta melaksanakan pengabdian masyarakat nyata.",
+                          },
+                          {
+                            name: "Divisi Media Kreatif",
+                            desc: "Publikasi informasi resmi, perancangan visual branding, pengelolaan media sosial, dan dokumentasi.",
+                          },
+                          {
+                            name: "Divisi Sponsor dan Dana Usaha",
+                            desc: "Kemandirian finansial organisasi melalui kemitraan sponsorship, merchandise, dan wirausaha kreatif.",
+                          },
+                        ].map((divisi, idx) => (
+                          <div
+                            key={idx}
+                            className="p-3.5 sm:p-4 rounded-xl bg-white/[0.04] border border-white/10 hover:border-white/25 hover:bg-white/[0.07] transition-all"
+                          >
+                            <h5 className="font-heading text-sm sm:text-base font-bold text-white">
+                              {divisi.name}
+                            </h5>
+                            <p className="font-subheading text-xs sm:text-[13px] text-white/70 mt-1 leading-relaxed">
+                              {divisi.desc}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                </LiquidGlassCard>
+                  </LiquidGlassCard>
+                </div>
 
               </div>
             </div>

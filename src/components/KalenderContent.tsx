@@ -5,6 +5,7 @@ import Link from "next/link";
 import { 
   ChevronLeft, 
   ChevronRight, 
+  ChevronDown,
   Calendar as CalendarIcon, 
   Search,
   X,
@@ -1056,6 +1057,19 @@ export default function KalenderContent() {
   // Selected Day event for side inspector
   const [selectedEvent, setSelectedEvent] = useState<HolyDayEvent | null>(null);
 
+  // Selected specific calendar date { day, month, year }
+  const [selectedDate, setSelectedDate] = useState<{ day: number; month: number; year: number } | null>(null);
+
+  // Category filter state ("ALL", "utama", "purnama-tilem", "pawukon")
+  const [selectedCategory, setSelectedCategory] = useState<"ALL" | "utama" | "purnama-tilem" | "pawukon">("ALL");
+  const [isCatDropdownOpen, setIsCatDropdownOpen] = useState<boolean>(false);
+
+  // DOM Refs for mobile auto-scrolling & gesture handling
+  const monthTabRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const inspectorRef = useRef<HTMLDivElement>(null);
+  const touchStartX = useRef<number | null>(null);
+  const touchStartY = useRef<number | null>(null);
+
   // Auto-detect client current user date on mount
   useEffect(() => {
     const today = new Date();
@@ -1066,20 +1080,53 @@ export default function KalenderContent() {
     setCurrentYear(y);
     setCurrentMonth(m);
     setTodayDate({ day: d, month: m, year: y });
+    setSelectedDate({ day: d, month: m, year: y });
 
-    // Find if today has a holy event or find closest in current month
+    // Check if today has a holy event
     const yearEvents = getHolyDaysForYear(y);
-    const todayEv = yearEvents.find((e) => e.month === m && e.dateNum === d);
-    if (todayEv) {
-      setSelectedEvent(todayEv);
-    } else {
-      const nextInMonth = yearEvents.find((e) => e.month === m && e.dateNum >= d) ||
-        yearEvents.find((e) => e.month === m) ||
-        yearEvents[0] ||
-        null;
-      setSelectedEvent(nextInMonth);
-    }
+    const todayEv = yearEvents.find((e) => e.month === m && e.dateNum === d) || null;
+    setSelectedEvent(todayEv);
   }, []);
+
+  // Smoothly center active month tab into mobile viewport
+  useEffect(() => {
+    monthTabRefs.current[currentMonth - 1]?.scrollIntoView({
+      inline: "center",
+      behavior: "smooth",
+      block: "nearest",
+    });
+  }, [currentMonth]);
+
+  // Touch swipe handlers for month switching
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null || touchStartY.current === null) return;
+    const deltaX = e.changedTouches[0].clientX - touchStartX.current;
+    const deltaY = e.changedTouches[0].clientY - touchStartY.current;
+    if (Math.abs(deltaX) > 60 && Math.abs(deltaX) > Math.abs(deltaY) * 1.5) {
+      if (deltaX < 0) {
+        handleNextMonth();
+      } else {
+        handlePrevMonth();
+      }
+    }
+    touchStartX.current = null;
+    touchStartY.current = null;
+  };
+
+  const handleSelectEvent = (ev: HolyDayEvent) => {
+    setSelectedEvent(ev);
+    setSelectedDate({ day: ev.dateNum, month: ev.month, year: ev.year });
+    if (typeof window !== "undefined" && window.innerWidth < 1024) {
+      setTimeout(() => {
+        inspectorRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }, 50);
+    }
+  };
 
   // Events for current active year
   const activeYearEvents = useMemo(() => {
@@ -1098,7 +1145,13 @@ export default function KalenderContent() {
     setCurrentMonth(nextM);
     const yrEvents = getHolyDaysForYear(nextY);
     const firstEv = yrEvents.find((e) => e.month === nextM);
-    if (firstEv) setSelectedEvent(firstEv);
+    if (firstEv) {
+      setSelectedEvent(firstEv);
+      setSelectedDate({ day: firstEv.dateNum, month: firstEv.month, year: firstEv.year });
+    } else {
+      setSelectedEvent(null);
+      setSelectedDate(null);
+    }
   };
 
   const handleNextMonth = () => {
@@ -1112,7 +1165,13 @@ export default function KalenderContent() {
     setCurrentMonth(nextM);
     const yrEvents = getHolyDaysForYear(nextY);
     const firstEv = yrEvents.find((e) => e.month === nextM);
-    if (firstEv) setSelectedEvent(firstEv);
+    if (firstEv) {
+      setSelectedEvent(firstEv);
+      setSelectedDate({ day: firstEv.dateNum, month: firstEv.month, year: firstEv.year });
+    } else {
+      setSelectedEvent(null);
+      setSelectedDate(null);
+    }
   };
 
   // Jump to today's date
@@ -1123,11 +1182,10 @@ export default function KalenderContent() {
     const d = today.getDate();
     setCurrentYear(y);
     setCurrentMonth(m);
+    setSelectedDate({ day: d, month: m, year: y });
     
     const yearEvents = getHolyDaysForYear(y);
-    const todayEv = yearEvents.find((e) => e.month === m && e.dateNum === d) ||
-      yearEvents.find((e) => e.month === m && e.dateNum >= d) ||
-      null;
+    const todayEv = yearEvents.find((e) => e.month === m && e.dateNum === d) || null;
     setSelectedEvent(todayEv);
   };
 
@@ -1175,8 +1233,17 @@ export default function KalenderContent() {
 
   // Holy days in current viewed month
   const currentMonthEvents = useMemo(() => {
-    return activeYearEvents.filter((e) => e.month === currentMonth);
+    return activeYearEvents
+      .filter((e) => e.month === currentMonth)
+      .sort((a, b) => a.dateNum - b.dateNum);
   }, [activeYearEvents, currentMonth]);
+
+  const currentEventIndex = currentMonthEvents.findIndex((e) => e.id === selectedEvent?.id);
+  const prevMonthEvent = currentEventIndex > 0 ? currentMonthEvents[currentEventIndex - 1] : null;
+  const nextMonthEvent =
+    currentEventIndex >= 0 && currentEventIndex < currentMonthEvents.length - 1
+      ? currentMonthEvents[currentEventIndex + 1]
+      : null;
 
   // Search matches strictly within the current year selected by the user
   const searchResults = useMemo(() => {
@@ -1203,55 +1270,230 @@ export default function KalenderContent() {
         {/* ==============================================================
             INTERACTIVE CONTROLS BAR: MONTH PAGER, YEAR SWITCHER & SMALL SEARCH BAR
             ============================================================== */}
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-8">
+        <div className="space-y-3 mb-6 sm:mb-8">
           
-          {/* Left/Center: Month Selector Pills */}
-          <div className="flex items-center gap-1.5 overflow-x-auto w-full md:w-auto p-1.5 rounded-full bg-white/[0.04] backdrop-blur-xl border border-white/15 scrollbar-none">
-            {MONTH_NAMES.map((name, idx) => {
-              const mNum = idx + 1;
-              const isActive = currentMonth === mNum;
-              return (
-                <button
-                  key={name}
-                  onClick={() => {
-                    setCurrentMonth(mNum);
-                    const firstEv = activeYearEvents.find((e) => e.month === mNum);
-                    if (firstEv) setSelectedEvent(firstEv);
-                  }}
-                  className={`px-3 py-1 rounded-full font-subheading text-xs font-semibold shrink-0 transition-all ${
-                    isActive
-                      ? "bg-white/20 text-white border border-white/25 shadow-sm scale-105"
-                      : "text-white/70 hover:text-white hover:bg-white/10"
-                  }`}
-                >
-                  {name.substring(0, 3)}
-                </button>
-              );
-            })}
+          {/* ==========================================================
+              DESKTOP CONTROLS BAR (md:flex)
+              ========================================================== */}
+          <div className="hidden md:flex items-center justify-between gap-3">
+            {/* Month Selector Pills */}
+            <div className="flex items-center gap-1.5 overflow-x-auto w-auto p-1.5 rounded-full bg-white/[0.04] backdrop-blur-xl border border-white/15 scrollbar-none snap-x">
+              {MONTH_NAMES.map((name, idx) => {
+                const mNum = idx + 1;
+                const isActive = currentMonth === mNum;
+                return (
+                  <button
+                    key={name}
+                    ref={(el) => {
+                      monthTabRefs.current[idx] = el;
+                    }}
+                    onClick={() => {
+                      setCurrentMonth(mNum);
+                      const firstEv = activeYearEvents.find((e) => e.month === mNum);
+                      if (firstEv) {
+                        setSelectedEvent(firstEv);
+                        setSelectedDate({ day: firstEv.dateNum, month: firstEv.month, year: firstEv.year });
+                      } else {
+                        setSelectedEvent(null);
+                        setSelectedDate(null);
+                      }
+                    }}
+                    className={`px-3 py-1.5 rounded-full font-subheading text-xs font-semibold shrink-0 snap-start active:scale-95 transition-all ${
+                      isActive
+                        ? "bg-white/20 text-white border border-white/30 shadow-md scale-105"
+                        : "text-white/70 hover:text-white hover:bg-white/10"
+                    }`}
+                  >
+                    {name.substring(0, 3)}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Right: "Hari Ini" Snap Button & Small Search Bar */}
+            <div className="flex items-center gap-2.5 justify-end">
+              <button
+                onClick={handleJumpToToday}
+                className="px-3.5 py-1.5 rounded-full bg-white/10 border border-white/20 text-xs font-subheading font-bold text-white hover:bg-white/20 active:scale-95 transition-all shrink-0"
+                title="Kembali ke Hari Ini"
+              >
+                Hari Ini
+              </button>
+
+              <div className="relative w-44 sm:w-56">
+                <Search className="w-3.5 h-3.5 text-white/50 absolute left-3 top-1/2 -translate-y-1/2" />
+                <input
+                  ref={searchInputRef}
+                  type="text"
+                  placeholder={`Cari hari raya ${currentYear}...`}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-8 pr-7 py-1.5 rounded-full bg-white/[0.06] backdrop-blur-md border border-white/15 text-xs text-white placeholder-white/40 focus:outline-none focus:border-[#8bd4ff] transition-all"
+                />
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery("")}
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-white/50 hover:text-white"
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
+                )}
+
+                {/* Search Results Dropdown */}
+                {searchQuery.trim() !== "" && (
+                  <div className="absolute top-full mt-2 right-0 w-72 sm:w-80 max-h-64 overflow-y-auto rounded-2xl bg-[#021827]/95 backdrop-blur-2xl border border-white/20 shadow-2xl z-50 p-2 space-y-1.5">
+                    <span className="text-[10px] font-subheading font-bold uppercase tracking-wider text-white/50 block px-2 py-1">
+                      Hasil Pencarian Tahun {currentYear} ({searchResults.length}):
+                    </span>
+                    {searchResults.length === 0 ? (
+                      <span className="text-xs text-white/60 italic block px-2 py-2">
+                        Tidak ditemukan hari raya di tahun {currentYear}.
+                      </span>
+                    ) : (
+                      searchResults.map((ev) => (
+                        <button
+                          key={ev.id}
+                          onClick={() => {
+                            setCurrentMonth(ev.month);
+                            handleSelectEvent(ev);
+                            setSearchQuery("");
+                          }}
+                          className="w-full text-left p-2 rounded-xl hover:bg-white/10 transition-colors flex items-center justify-between text-xs"
+                        >
+                          <div>
+                            <span className="font-heading font-bold text-white block">
+                              {ev.title}
+                            </span>
+                            <span className="font-subheading text-[10px] text-white/60 block">
+                              {ev.dateStr}
+                            </span>
+                          </div>
+                          <span className="text-[9px] px-1.5 py-0.5 rounded bg-white/10 text-[#8bd4ff]">
+                            Lihat
+                          </span>
+                        </button>
+                      ))
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
 
-          {/* Right: "Hari Ini" Snap Button & Small Search Bar */}
-          <div className="flex items-center gap-2.5 w-full md:w-auto justify-end">
+          {/* Desktop Category Filter Pills */}
+          <div className="hidden md:flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none snap-x">
+            {[
+              { id: "ALL", label: "Semua Kategori", dot: null },
+              { id: "utama", label: "Hari Raya Utama", dot: "bg-[#ff3b4e]" },
+              { id: "purnama-tilem", label: "Purnama & Tilem", dot: "bg-[#ffd166]" },
+              { id: "pawukon", label: "Pawukon", dot: "bg-[#38bdf8]" },
+            ].map((cat) => (
+              <button
+                key={cat.id}
+                onClick={() => setSelectedCategory(cat.id as any)}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-subheading font-medium whitespace-nowrap snap-start active:scale-95 transition-all ${
+                  selectedCategory === cat.id
+                    ? "bg-white/20 text-white border border-white/30 shadow-sm"
+                    : "bg-white/[0.04] text-white/60 hover:text-white border border-white/5"
+                }`}
+              >
+                {cat.dot && <span className={`w-2 h-2 rounded-full ${cat.dot} shrink-0`} />}
+                <span>{cat.label}</span>
+              </button>
+            ))}
+          </div>
+
+          {/* ==========================================================
+              MOBILE CONTROLS BAR (< md): 1 UNIFIED HORIZONTAL ROW
+              Month slider removed, category selector made into a dropdown
+              so "Kategori", "Hari Ini", and "Cari" fit in 1 horizontal line
+              ========================================================== */}
+          <div className="flex md:hidden items-center gap-2 w-full">
             
+            {/* Custom Liquid Glass Category Dropdown */}
+            <div className="relative shrink-0">
+              <button
+                type="button"
+                onClick={() => setIsCatDropdownOpen(!isCatDropdownOpen)}
+                className="flex items-center gap-1.5 pl-3 pr-2.5 py-2 rounded-full bg-white/[0.08] backdrop-blur-md border border-white/20 text-xs font-subheading font-semibold text-white hover:bg-white/15 active:scale-95 transition-all shadow-md"
+              >
+                {selectedCategory === "utama" && <span className="w-2 h-2 rounded-full bg-[#ff3b4e] shrink-0" />}
+                {selectedCategory === "purnama-tilem" && <span className="w-2 h-2 rounded-full bg-[#ffd166] shrink-0" />}
+                {selectedCategory === "pawukon" && <span className="w-2 h-2 rounded-full bg-[#38bdf8] shrink-0" />}
+                <span className="truncate max-w-[95px]">
+                  {selectedCategory === "ALL"
+                    ? "Kategori"
+                    : selectedCategory === "utama"
+                    ? "Utama"
+                    : selectedCategory === "purnama-tilem"
+                    ? "Purnama/Tilem"
+                    : "Pawukon"}
+                </span>
+                <ChevronDown
+                  className={`w-3.5 h-3.5 text-white/60 transition-transform duration-200 ${
+                    isCatDropdownOpen ? "rotate-180" : ""
+                  }`}
+                />
+              </button>
+
+              {isCatDropdownOpen && (
+                <>
+                  <div
+                    className="fixed inset-0 z-40"
+                    onClick={() => setIsCatDropdownOpen(false)}
+                  />
+                  <div className="absolute top-full left-0 mt-2 w-48 rounded-2xl bg-[#021827] border border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.9)] z-50 p-1.5 space-y-1 animate-in fade-in zoom-in-95 duration-150">
+                    {[
+                      { id: "ALL", label: "Semua Kategori", dot: null },
+                      { id: "utama", label: "Hari Raya Utama", dot: "bg-[#ff3b4e]" },
+                      { id: "purnama-tilem", label: "Purnama & Tilem", dot: "bg-[#ffd166]" },
+                      { id: "pawukon", label: "Pawukon / Tumpek", dot: "bg-[#38bdf8]" },
+                    ].map((cat) => (
+                      <button
+                        key={cat.id}
+                        type="button"
+                        onClick={() => {
+                          setSelectedCategory(cat.id as any);
+                          setIsCatDropdownOpen(false);
+                        }}
+                        className={`w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-subheading font-medium text-left transition-colors ${
+                          selectedCategory === cat.id
+                            ? "bg-white/20 text-white font-bold"
+                            : "text-white/75 hover:text-white hover:bg-white/10"
+                        }`}
+                      >
+                        {cat.dot ? (
+                          <span className={`w-2 h-2 rounded-full ${cat.dot} shrink-0`} />
+                        ) : (
+                          <span className="w-2 h-2 rounded-full bg-white/30 shrink-0" />
+                        )}
+                        <span>{cat.label}</span>
+                      </button>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
+
             {/* "Hari Ini" Snap Button */}
             <button
               onClick={handleJumpToToday}
-              className="px-3 py-1.5 rounded-full bg-white/10 border border-white/20 text-xs font-subheading font-bold text-white hover:bg-white/20 transition-all shrink-0"
+              className="px-3 py-2 rounded-full bg-white/10 border border-white/20 text-xs font-subheading font-bold text-white hover:bg-white/20 active:scale-95 transition-all shrink-0 whitespace-nowrap"
               title="Kembali ke Hari Ini"
             >
               Hari Ini
             </button>
 
-            {/* Small Search Bar */}
-            <div className="relative w-44 sm:w-56">
+            {/* Compact Search Bar with Flexible Width */}
+            <div className="relative flex-1 min-w-0">
               <Search className="w-3.5 h-3.5 text-white/50 absolute left-3 top-1/2 -translate-y-1/2" />
               <input
                 ref={searchInputRef}
                 type="text"
-                placeholder={`Cari hari raya ${currentYear}...`}
+                placeholder="Cari..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-8 pr-7 py-1.5 rounded-full bg-white/[0.06] backdrop-blur-md border border-white/15 text-xs text-white placeholder-white/40 focus:outline-none focus:border-[#8bd4ff] transition-all"
+                className="w-full pl-8 pr-7 py-2 rounded-full bg-white/[0.06] backdrop-blur-md border border-white/15 text-xs text-white placeholder-white/40 focus:outline-none focus:border-[#8bd4ff] transition-all"
               />
               {searchQuery && (
                 <button
@@ -1262,11 +1504,11 @@ export default function KalenderContent() {
                 </button>
               )}
 
-              {/* Search Results Dropdown */}
+              {/* Mobile Search Results Dropdown */}
               {searchQuery.trim() !== "" && (
-                <div className="absolute top-full mt-2 right-0 w-72 sm:w-80 max-h-64 overflow-y-auto rounded-2xl bg-[#021827]/95 backdrop-blur-2xl border border-white/20 shadow-2xl z-50 p-2 space-y-1.5">
+                <div className="absolute top-full mt-2 right-0 left-0 max-h-64 overflow-y-auto rounded-2xl bg-[#021827]/98 backdrop-blur-2xl border border-white/20 shadow-2xl z-50 p-2 space-y-1.5">
                   <span className="text-[10px] font-subheading font-bold uppercase tracking-wider text-white/50 block px-2 py-1">
-                    Hasil Pencarian Tahun {currentYear} ({searchResults.length}):
+                    Hasil Pencarian ({searchResults.length}):
                   </span>
                   {searchResults.length === 0 ? (
                     <span className="text-xs text-white/60 italic block px-2 py-2">
@@ -1278,7 +1520,7 @@ export default function KalenderContent() {
                         key={ev.id}
                         onClick={() => {
                           setCurrentMonth(ev.month);
-                          setSelectedEvent(ev);
+                          handleSelectEvent(ev);
                           setSearchQuery("");
                         }}
                         className="w-full text-left p-2 rounded-xl hover:bg-white/10 transition-colors flex items-center justify-between text-xs"
@@ -1302,6 +1544,7 @@ export default function KalenderContent() {
             </div>
 
           </div>
+
         </div>
 
         {/* ==============================================================
@@ -1315,163 +1558,203 @@ export default function KalenderContent() {
           <div className="lg:col-span-8 flex flex-col h-full">
             
             <LiquidGlassCard 
-              className="p-4 sm:p-6 w-full shadow-2xl h-full"
+              className="p-3.5 sm:p-6 w-full shadow-2xl h-full"
               contentClassName="h-full flex flex-col justify-between"
             >
-              
-              {/* Calendar Month Header with Prev/Next Controls */}
-              <div className="flex items-center justify-between pb-3.5 mb-3.5 border-b border-white/10">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-xl bg-white/5 border border-white/10 text-[#8bd4ff]">
-                    <CalendarIcon className="w-5 h-5" />
+              <div
+                onTouchStart={handleTouchStart}
+                onTouchEnd={handleTouchEnd}
+                className="h-full flex flex-col justify-between"
+              >
+                {/* Calendar Month Header with Prev/Next Controls */}
+                <div className="flex items-center justify-between pb-3.5 mb-3.5 border-b border-white/10">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-xl bg-white/5 border border-white/10 text-[#8bd4ff]">
+                      <CalendarIcon className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h2 className="font-heading text-xl sm:text-3xl font-extrabold text-white tracking-tight leading-none">
+                        {MONTH_NAMES[currentMonth - 1]} {currentYear}
+                      </h2>
+                      <span className="font-subheading text-[11px] sm:text-xs text-[#8bd4ff] font-medium block mt-1">
+                        Penanggalan Hindu Dharma · {currentYear}
+                      </span>
+                    </div>
                   </div>
-                  <div>
-                    <h2 className="font-heading text-2xl sm:text-3xl font-extrabold text-white tracking-tight leading-none">
-                      {MONTH_NAMES[currentMonth - 1]} {currentYear}
-                    </h2>
-                    <span className="font-subheading text-xs text-[#8bd4ff] font-medium block mt-1">
-                      Penanggalan Hindu Dharma · {currentYear}
-                    </span>
+
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={handlePrevMonth}
+                      className="p-2 rounded-xl bg-white/5 border border-white/15 text-white/80 hover:text-white hover:bg-white/15 active:scale-95 transition-all"
+                      title="Bulan Sebelumnya"
+                    >
+                      <ChevronLeft className="w-5 h-5" />
+                    </button>
+                    <button
+                      onClick={handleNextMonth}
+                      className="p-2 rounded-xl bg-white/5 border border-white/15 text-white/80 hover:text-white hover:bg-white/15 active:scale-95 transition-all"
+                      title="Bulan Berikutnya"
+                    >
+                      <ChevronRight className="w-5 h-5" />
+                    </button>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={handlePrevMonth}
-                    className="p-2 rounded-xl bg-white/5 border border-white/15 text-white/80 hover:text-white hover:bg-white/15 transition-all"
-                    title="Bulan Sebelumnya"
-                  >
-                    <ChevronLeft className="w-5 h-5" />
-                  </button>
-                  <button
-                    onClick={handleNextMonth}
-                    className="p-2 rounded-xl bg-white/5 border border-white/15 text-white/80 hover:text-white hover:bg-white/15 transition-all"
-                    title="Bulan Berikutnya"
-                  >
-                    <ChevronRight className="w-5 h-5" />
-                  </button>
-                </div>
-              </div>
-
-              {/* 7-Day Column Headers (Sun to Sat with Balinese Wuku Names) */}
-              <div className="grid grid-cols-7 gap-1.5 sm:gap-2 mb-2 text-center select-none">
-                {BALINESE_DAY_NAMES.map((day) => (
-                  <div
-                    key={day.id}
-                    className={`py-1.5 sm:py-2 px-1 rounded-xl bg-white/[0.03] border border-white/5 flex flex-col items-center justify-center ${
-                      day.isRed ? "text-[#ff8b94]" : "text-white/80"
-                    }`}
-                  >
-                    <span className="font-heading text-xs sm:text-sm font-bold block">
-                      {day.id}
-                    </span>
-                    <span className="text-[9px] sm:text-[10px] font-subheading text-white/50 block">
-                      {day.bali}
-                    </span>
-                  </div>
-                ))}
-              </div>
-
-              {/* The Actual Calendar Days Grid (7 Columns × Weeks) */}
-              <div className="grid grid-cols-7 gap-1.5 sm:gap-2 flex-1">
-                {calendarDays.map((cell, idx) => {
-                  // Find all events on this day
-                  const dayEvents = cell.isCurrentMonth
-                    ? activeYearEvents.filter(
-                        (e) => e.month === cell.month && e.dateNum === cell.dateNum
-                      )
-                    : [];
-
-                  const hasEvent = dayEvents.length > 0;
-                  const primaryEvent = dayEvents[0];
-                  const isSelected =
-                    selectedEvent &&
-                    selectedEvent.month === cell.month &&
-                    selectedEvent.dateNum === cell.dateNum &&
-                    selectedEvent.year === cell.year &&
-                    cell.isCurrentMonth;
-
-                  // Check if today matches client browser date
-                  const isToday =
-                    todayDate &&
-                    todayDate.day === cell.dateNum &&
-                    todayDate.month === cell.month &&
-                    todayDate.year === cell.year &&
-                    cell.isCurrentMonth;
-
-                  const isUtama = primaryEvent?.category === "utama";
-                  const isPurnamaTilem = primaryEvent?.category === "purnama-tilem";
-                  const isSunday = idx % 7 === 0;
-
-                  return (
+                {/* 7-Day Column Headers (Sun to Sat with Balinese Wuku Names) */}
+                <div className="grid grid-cols-7 gap-1 sm:gap-2 mb-2 text-center select-none">
+                  {BALINESE_DAY_NAMES.map((day) => (
                     <div
-                      key={idx}
-                      onClick={() => {
-                        if (primaryEvent) setSelectedEvent(primaryEvent);
-                      }}
-                      className={`min-h-[72px] sm:min-h-[82px] lg:min-h-[88px] p-2 rounded-xl sm:rounded-2xl flex flex-col justify-between transition-all duration-200 relative select-none ${
-                        !cell.isCurrentMonth
-                          ? "bg-white/[0.01] border border-white/[0.03] opacity-25 pointer-events-none"
-                          : hasEvent
-                          ? "cursor-pointer bg-white/[0.04] border border-white/10 hover:border-white/25 hover:bg-white/[0.07] hover:scale-[1.02]"
-                          : "bg-white/[0.02] border border-white/5 hover:border-white/15"
-                      } ${
-                        isSelected
-                          ? "ring-2 ring-white/50 bg-white/[0.12] shadow-xl border-transparent"
-                          : isToday
-                          ? "ring-1.5 ring-emerald-400/70 bg-emerald-500/10 border-emerald-400/30"
-                          : ""
+                      key={day.id}
+                      className={`py-1.5 sm:py-2 px-0.5 sm:px-1 rounded-xl bg-white/[0.03] border border-white/5 flex flex-col items-center justify-center ${
+                        day.isRed ? "text-[#ff8b94]" : "text-white/80"
                       }`}
                     >
-                      {/* Top Bar of Cell: Day Number & Small Dot indicator */}
-                      <div className="flex items-center justify-between w-full">
-                        <div className="flex items-center gap-1.5">
-                          <span
-                            className={`font-heading text-xs sm:text-sm font-bold ${
-                              !cell.isCurrentMonth
-                                ? "text-white/30"
-                                : isToday
-                                ? "text-emerald-300"
-                                : isSunday || primaryEvent?.isNationalHoliday
-                                ? "text-[#ff8b94]"
-                                : "text-white"
-                            }`}
-                          >
-                            {cell.dateNum}
-                          </span>
-                          {isToday && (
-                            <span className="text-[8px] font-subheading font-medium px-1.5 py-0.2 rounded bg-emerald-400/15 text-emerald-300">
-                              Hari Ini
+                      <span className="font-heading text-xs sm:text-sm font-bold block">
+                        {day.id}
+                      </span>
+                      <span className="text-[8px] sm:text-[10px] font-subheading text-white/50 block">
+                        {day.bali}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* The Actual Calendar Days Grid (7 Columns × Weeks) */}
+                <div className="grid grid-cols-7 gap-1 sm:gap-2 flex-1">
+                  {calendarDays.map((cell, idx) => {
+                    // Find all events on this day
+                    const dayEvents = cell.isCurrentMonth
+                      ? activeYearEvents.filter(
+                          (e) => e.month === cell.month && e.dateNum === cell.dateNum
+                        )
+                      : [];
+
+                    const hasEvent = dayEvents.length > 0;
+                    const primaryEvent = dayEvents[0];
+                    const isSelected =
+                      selectedDate !== null
+                        ? selectedDate.day === cell.dateNum &&
+                          selectedDate.month === cell.month &&
+                          selectedDate.year === cell.year &&
+                          cell.isCurrentMonth
+                        : selectedEvent !== null &&
+                          selectedEvent.month === cell.month &&
+                          selectedEvent.dateNum === cell.dateNum &&
+                          selectedEvent.year === cell.year &&
+                          cell.isCurrentMonth;
+
+                    // Check if today matches client browser date
+                    const isToday =
+                      todayDate &&
+                      todayDate.day === cell.dateNum &&
+                      todayDate.month === cell.month &&
+                      todayDate.year === cell.year &&
+                      cell.isCurrentMonth;
+
+                    const isUtama = dayEvents.some((e) => e.category === "utama");
+                    const isPurnamaTilem = dayEvents.some((e) => e.category === "purnama-tilem");
+                    const isSunday = idx % 7 === 0;
+
+                    // Filter dimming when category filter is active
+                    const isDimmedByCategory =
+                      selectedCategory !== "ALL" &&
+                      hasEvent &&
+                      !dayEvents.some((e) => e.category === selectedCategory);
+
+                    return (
+                      <div
+                        key={idx}
+                        onClick={() => {
+                          if (!cell.isCurrentMonth) return;
+                          setSelectedDate({ day: cell.dateNum, month: cell.month, year: cell.year });
+                          if (primaryEvent) {
+                            handleSelectEvent(primaryEvent);
+                          } else {
+                            setSelectedEvent(null);
+                          }
+                        }}
+                        className={`min-h-[50px] sm:min-h-[82px] lg:min-h-[88px] p-1.5 sm:p-2 rounded-xl sm:rounded-2xl flex flex-col justify-between transition-all duration-200 relative select-none ${
+                          !cell.isCurrentMonth
+                            ? "bg-white/[0.01] border border-white/[0.03] opacity-25 pointer-events-none"
+                            : "cursor-pointer active:scale-95 " +
+                              (hasEvent
+                                ? "bg-white/[0.04] border border-white/10 hover:border-white/25 hover:bg-white/[0.07]"
+                                : "bg-white/[0.02] border border-white/5 hover:border-white/15 hover:bg-white/[0.05]")
+                        } ${
+                          isSelected
+                            ? "ring-2 ring-white/90 bg-white/[0.18] shadow-[0_0_15px_rgba(255,255,255,0.25)] border-white/40 scale-[1.02] z-10"
+                            : isToday
+                            ? "ring-1.5 ring-emerald-400/70 bg-emerald-500/10 border-emerald-400/30"
+                            : ""
+                        } ${isDimmedByCategory ? "opacity-30" : ""}`}
+                      >
+                        {/* Top Bar of Cell: Day Number & Small Dot indicator */}
+                        <div className="flex items-center justify-between w-full">
+                          <div className="flex items-center gap-1">
+                            <span
+                              className={`font-heading text-xs sm:text-sm font-bold ${
+                                !cell.isCurrentMonth
+                                  ? "text-white/30"
+                                  : isToday
+                                  ? "text-emerald-300"
+                                  : isSunday || primaryEvent?.isNationalHoliday
+                                  ? "text-[#ff8b94]"
+                                  : "text-white"
+                              }`}
+                            >
+                              {cell.dateNum}
                             </span>
+                            {isToday && (
+                              <span className="hidden sm:inline-block text-[8px] font-subheading font-medium px-1.5 py-0.2 rounded bg-emerald-400/15 text-emerald-300">
+                                Hari Ini
+                              </span>
+                            )}
+                          </div>
+
+                          {hasEvent && (
+                            <span
+                              className={`w-1.5 h-1.5 rounded-full ${
+                                isUtama
+                                  ? "bg-[#ff4d5a]"
+                                  : isPurnamaTilem
+                                  ? "bg-[#ffd166]"
+                                  : "bg-[#38bdf8]"
+                              }`}
+                            />
                           )}
                         </div>
 
+                        {/* Event Name as Pure Clean Text on Desktop */}
+                        {hasEvent && primaryEvent && (
+                          <div className="hidden sm:block mt-auto pt-1.5">
+                            <span className="text-[10px] sm:text-[11px] font-subheading font-medium text-white/90 leading-tight line-clamp-2 block">
+                              {primaryEvent.shortTitle || primaryEvent.title}
+                            </span>
+                          </div>
+                        )}
+
+                        {/* Mobile Glowing Category Dots (< 640px) */}
                         {hasEvent && (
-                          <span
-                            className={`w-1.5 h-1.5 rounded-full ${
-                              isUtama
-                                ? "bg-[#ff4d5a]"
-                                : isPurnamaTilem
-                                ? "bg-[#38bdf8]"
-                                : "bg-amber-300"
-                            }`}
-                          />
+                          <div className="sm:hidden mt-auto pt-1 flex items-center justify-center gap-1">
+                            {dayEvents.slice(0, 3).map((ev, i) => (
+                              <span
+                                key={i}
+                                className={`w-1.5 h-1.5 rounded-full ${
+                                  ev.category === "utama"
+                                    ? "bg-[#ff3b4e] shadow-[0_0_6px_#ff3b4e]"
+                                    : ev.category === "purnama-tilem"
+                                    ? "bg-[#ffd166] shadow-[0_0_6px_#ffd166]"
+                                    : "bg-[#38bdf8] shadow-[0_0_6px_#38bdf8]"
+                                }`}
+                              />
+                            ))}
+                          </div>
                         )}
                       </div>
-
-                      {/* Event Name as Pure Clean Text (No blocky colored container) */}
-                      {hasEvent && primaryEvent && (
-                        <div className="mt-auto pt-1.5">
-                          <span className="text-[10px] sm:text-[11px] font-subheading font-medium text-white/90 leading-tight line-clamp-2 block">
-                            {primaryEvent.shortTitle || primaryEvent.title}
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
               </div>
-
             </LiquidGlassCard>
 
           </div>
@@ -1479,7 +1762,7 @@ export default function KalenderContent() {
           {/* ==========================================================
               RIGHT: SELECTED EVENT INSPECTOR & MONTH SUMMARY (Symmetrical with Calendar)
               ========================================================== */}
-          <div className="lg:col-span-4 flex flex-col justify-between h-full space-y-4">
+          <div ref={inspectorRef} className="lg:col-span-4 flex flex-col justify-between h-full space-y-4 scroll-mt-24">
             
             {/* Inspector Card: Details of Selected Date */}
             <LiquidGlassCard 
@@ -1488,7 +1771,7 @@ export default function KalenderContent() {
             >
               <div>
                 <span className="text-[10px] font-subheading font-bold uppercase tracking-wider text-[#8bd4ff] block mb-1">
-                  Detail Rerainan Terpilih
+                  {selectedEvent ? "Detail Rerainan Terpilih" : "Detail Tanggal Terpilih"}
                 </span>
 
                 {selectedEvent ? (
@@ -1525,9 +1808,45 @@ export default function KalenderContent() {
                       </div>
                     </div>
                   </div>
+                ) : selectedDate ? (
+                  <div className="space-y-3 mt-1.5">
+                    <div>
+                      <span className="font-subheading text-xs text-white/60 block">
+                        {`${
+                          BALINESE_DAY_NAMES[
+                            new Date(selectedDate.year, selectedDate.month - 1, selectedDate.day).getDay()
+                          ]?.full || ""
+                        }, ${selectedDate.day} ${MONTH_NAMES[selectedDate.month - 1]} ${selectedDate.year}`}
+                      </span>
+                      <h3 className="font-heading text-xl sm:text-2xl font-black text-white mt-0.5 leading-snug">
+                        Tidak Ada Rerainan Khusus
+                      </h3>
+                      <span className="font-subheading text-xs text-[#8bd4ff] font-medium block mt-0.5">
+                        Hari Biasa (Rahina Kalender)
+                      </span>
+                    </div>
+
+                    <p className="font-subheading text-xs sm:text-[13px] text-white/80 leading-relaxed">
+                      Tidak ada perayaan rerainan besar atau hari raya khusus Hindu pada tanggal ini. Persembahyangan harian (Tri Sandhya & Yadnya Sesa) tetap dilaksanakan secara rutin.
+                    </p>
+
+                    <div className="pt-2.5 border-t border-white/10">
+                      <span className="text-[10px] font-subheading font-bold text-white/50 uppercase tracking-wider block mb-1.5">
+                        Persembahyangan Harian Rutin:
+                      </span>
+                      <div className="flex flex-wrap gap-1.5">
+                        <span className="text-[10px] font-subheading px-2.5 py-0.5 rounded-lg bg-white/5 border border-white/10 text-white/90">
+                          Tri Sandhya 3 Waktu
+                        </span>
+                        <span className="text-[10px] font-subheading px-2.5 py-0.5 rounded-lg bg-white/5 border border-white/10 text-white/90">
+                          Yadnya Sesa (Saiban)
+                        </span>
+                      </div>
+                    </div>
+                  </div>
                 ) : (
                   <div className="py-8 text-center text-white/60 text-xs">
-                    Pilih salah satu tanggal yang ditandai pada kalender untuk melihat rincian persembahyangan.
+                    Pilih salah satu tanggal pada kalender untuk melihat rincian persembahyangan.
                   </div>
                 )}
               </div>
@@ -1536,6 +1855,39 @@ export default function KalenderContent() {
                 <div className="mt-3 p-2.5 rounded-xl bg-white/5 border border-white/10 flex items-center gap-2 text-xs text-white/80">
                   <Info className="w-4 h-4 text-white/50 shrink-0" />
                   <span>Ditetapkan sebagai Hari Libur Nasional / Cuti Bersama.</span>
+                </div>
+              )}
+
+              {/* Intra-Month Holy Day Stepper */}
+              {currentMonthEvents.length > 1 && (
+                <div className="flex items-center justify-between pt-3 mt-3 border-t border-white/10 gap-2">
+                  <button
+                    disabled={!prevMonthEvent}
+                    onClick={() => prevMonthEvent && handleSelectEvent(prevMonthEvent)}
+                    className={`flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-subheading font-medium transition-all ${
+                      prevMonthEvent
+                        ? "bg-white/10 hover:bg-white/20 text-white active:scale-95"
+                        : "opacity-30 text-white/40 cursor-not-allowed"
+                    }`}
+                  >
+                    <ChevronLeft className="w-3.5 h-3.5" />
+                    <span>Sebelumnya</span>
+                  </button>
+                  <span className="text-[10px] font-subheading text-white/50">
+                    {currentEventIndex >= 0 ? `${currentEventIndex + 1} dari ${currentMonthEvents.length}` : ""}
+                  </span>
+                  <button
+                    disabled={!nextMonthEvent}
+                    onClick={() => nextMonthEvent && handleSelectEvent(nextMonthEvent)}
+                    className={`flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-subheading font-medium transition-all ${
+                      nextMonthEvent
+                        ? "bg-white/10 hover:bg-white/20 text-white active:scale-95"
+                        : "opacity-30 text-white/40 cursor-not-allowed"
+                    }`}
+                  >
+                    <span>Berikutnya</span>
+                    <ChevronRight className="w-3.5 h-3.5" />
+                  </button>
                 </div>
               )}
             </LiquidGlassCard>
@@ -1559,7 +1911,7 @@ export default function KalenderContent() {
                     {currentMonthEvents.map((ev) => (
                       <button
                         key={ev.id}
-                        onClick={() => setSelectedEvent(ev)}
+                        onClick={() => handleSelectEvent(ev)}
                         className={`w-full text-left p-2 rounded-xl border transition-all flex items-center justify-between text-xs ${
                           selectedEvent?.id === ev.id
                             ? "bg-white/10 border-white/30 text-white"

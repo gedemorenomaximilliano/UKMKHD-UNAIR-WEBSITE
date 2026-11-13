@@ -29,7 +29,7 @@ export default function TentangContent() {
   };
 
   return (
-    <div className="relative isolate min-h-screen pt-16 sm:pt-18 lg:pt-20 pb-12 sm:pb-16 overflow-hidden bg-[#02121e] text-white">
+    <div className="relative isolate min-h-screen pt-[86px] sm:pt-[88px] lg:pt-20 pb-12 sm:pb-16 overflow-hidden bg-[#02121e] text-white">
       {/* Dynamic Animated Canvas Background */}
       <AnimatedBackground />
 

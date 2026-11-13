@@ -1,0 +1,207 @@
+@import url('https://fonts.googleapis.com/css2?family=Afacad:ital,wght@0,400..700;1,400..700&family=Montserrat:ital,wght@0,400..800;1,400..800&family=Poppins:ital,wght@0,300..700;1,300..700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --warna-utama: #023048; /* Cool Blue / Navy */
+  --warna-aksen: #c1111e; /* Redwood */
+  --warna-maroon: #770101; /* Burnt Umber */
+  --warna-biru-baja: #659aba; /* Light Grayish */
+  --warna-merah-muda: #f86b74; /* Coral flame tip */
+  --warna-biru-muda: #8bd4ff; /* Sky Tint */
+  --warna-krem: #fbead1; /* Macadamia */
+  --warna-latar: #02121e; /* Dark Base */
+  --warna-teks: #ffffff; /* Crisp White */
+
+  --font-afacad: 'Afacad', sans-serif;
+  --font-montserrat: 'Montserrat', sans-serif;
+  --font-poppins: 'Poppins', sans-serif;
+}
+
+body {
+  background-color: var(--warna-latar);
+  color: var(--warna-teks);
+  font-family: var(--font-poppins);
+  overflow-x: hidden;
+  min-height: 100vh;
+  selection-background-color: var(--warna-aksen);
+  selection-color: #ffffff;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #02121e;
+}
+::-webkit-scrollbar-thumb {
+  background: #659aba;
+  border-radius: 9999px;
+  border: 2px solid #02121e;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #8bd4ff;
+}
+
+/* ==============================================================
+   ANIMATED BACKGROUND: Visibly Flowing Dark Blue, Dark Red, & Bright Red
+   ============================================================== */
+@keyframes moveBackgroundGrad {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.bg-animated-dark-flame {
+  background: linear-gradient(
+    125deg,
+    #02121e 0%,
+    #05233a 16%,
+    #3b0509 35%,
+    #c4111f 48%,
+    #ff2a3b 56%,
+    #4a060b 68%,
+    #022842 82%,
+    #01101a 100%
+  );
+  background-size: 280% 280%;
+  animation: moveBackgroundGrad 10s ease-in-out infinite;
+}
+
+/* Fluid Floating Glow Orbs Keyframes */
+@keyframes orbFloat1 {
+  0%, 100% {
+    transform: translate(0px, 0px) scale(1);
+    opacity: 0.45;
+  }
+  33% {
+    transform: translate(80px, -50px) scale(1.18);
+    opacity: 0.7;
+  }
+  66% {
+    transform: translate(-50px, 60px) scale(0.92);
+    opacity: 0.5;
+  }
+}
+
+@keyframes orbFloat2 {
+  0%, 100% {
+    transform: translate(0px, 0px) scale(1);
+    opacity: 0.4;
+  }
+  40% {
+    transform: translate(-90px, 70px) scale(1.22);
+    opacity: 0.65;
+  }
+  75% {
+    transform: translate(60px, -40px) scale(0.88);
+    opacity: 0.45;
+  }
+}
+
+@keyframes orbFloat3 {
+  0%, 100% {
+    transform: translate(0px, 0px) scale(1);
+    opacity: 0.35;
+  }
+  50% {
+    transform: translate(90px, 80px) scale(1.25);
+    opacity: 0.6;
+  }
+}
+
+.animate-orb-1 {
+  animation: orbFloat1 8s ease-in-out infinite;
+}
+
+.animate-orb-2 {
+  animation: orbFloat2 10s ease-in-out infinite;
+}
+
+.animate-orb-3 {
+  animation: orbFloat3 12s ease-in-out infinite;
+}
+
+/* ==============================================================
+   LIQUID GLASS STYLES (Based on User's Snippet with Real Specular Glass)
+   ============================================================== */
+.liquidGlass-wrapper {
+  position: relative;
+  display: flex;
+  font-weight: 600;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 
+    0 20px 50px rgba(0, 0, 0, 0.45),
+    0 0 25px rgba(255, 255, 255, 0.03);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.liquidGlass-effect {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  overflow: hidden;
+}
+
+.liquidGlass-tint {
+  z-index: 1;
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.14) 0%,
+    rgba(255, 255, 255, 0.03) 50%,
+    rgba(255, 255, 255, 0.08) 100%
+  );
+}
+
+.liquidGlass-shine {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  overflow: hidden;
+  pointer-events: none;
+  box-shadow: 
+    inset 2px 2px 2px 0 rgba(255, 255, 255, 0.55),
+    inset -1px -1px 2px 1px rgba(255, 255, 255, 0.25);
+  border-top: 1px solid rgba(255, 255, 255, 0.5);
+  border-left: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+.liquidGlass-reflection {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    60deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.06) 45%,
+    rgba(255, 255, 255, 0.15) 50%,
+    transparent 55%
+  );
+  pointer-events: none;
+  z-index: 2;
+  transform: rotate(-15deg);
+}
+
+.liquidGlass-text {
+  position: relative;
+  z-index: 3;
+}
+
+

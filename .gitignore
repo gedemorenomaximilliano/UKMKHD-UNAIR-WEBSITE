@@ -1,0 +1,33 @@
+# Dependencies
+/node_modules
+/.pnp
+.pnp.js
+.yarn/install-state.gz
+
+# Next.js build output
+/.next/
+/out/
+
+# Production build artifacts
+build
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Local environment
+.env*.local
+
+# Vercel
+.vercel
+
+# System & OS
+.DS_Store
+Thumbs.db
+*.ps1
+
+# Excluded documents requested by user
+__LAPORAN PERTANGGUNGJAWABAN PENGURUS UKMKHD 2026 (1).md
+mobile implementation plan.md
+Rencana Website UKMKHD UNAIR.md

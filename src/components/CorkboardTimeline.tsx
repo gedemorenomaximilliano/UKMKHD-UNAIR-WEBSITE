@@ -197,7 +197,7 @@ export default function CorkboardTimeline({ onSelectEvent }: CorkboardTimelinePr
           ============================================================== */}
       <div className="flex flex-col sm:flex-row items-center justify-between gap-2.5 p-2 sm:p-2.5 rounded-2xl bg-white/[0.04] backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.25)]">
         {/* Left: View Mode Toggle */}
-        <div className="flex items-center gap-1.5 p-1 rounded-xl bg-[#021724]/80 border border-white/10">
+        <div className="flex items-center gap-1.5 p-1 rounded-xl bg-white/10 backdrop-blur-2xl border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]">
           <button
             onClick={() => setViewMode("corkboard")}
             className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-subheading font-medium transition-all ${

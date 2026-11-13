@@ -103,15 +103,12 @@ export default function AssetLoadingScreen() {
 
         {/* Brand Title Text */}
         <div className="space-y-1">
-          <span className="font-heading text-base sm:text-lg font-bold tracking-tight text-white block">
+          <span className="font-heading text-base sm:text-lg font-bold tracking-tight text-white block uppercase">
             UKMKHD UNIVERSITAS AIRLANGGA
           </span>
-          <span className="font-subheading text-xs font-semibold text-[#8bd4ff] tracking-wider uppercase block">
+          <span className="font-heading text-base sm:text-lg font-bold tracking-tight text-white block uppercase">
             Kabinet Nivaramitra 2026
           </span>
-          <p className="font-subheading text-[11px] text-white/50 tracking-wide mt-1">
-            Menyalakan Harmoni, Merajut Solidaritas
-          </p>
         </div>
 
         {/* Progress Percentage Indicator */}

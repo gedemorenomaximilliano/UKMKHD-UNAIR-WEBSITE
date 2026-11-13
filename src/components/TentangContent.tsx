@@ -138,7 +138,7 @@ export default function TentangContent() {
               </div>
 
               {/* Right Column: Profil & Sejarah UKMKHD (Symmetrically Aligned) */}
-              <div className="lg:col-span-7 flex flex-col justify-between h-full space-y-4">
+              <div className="lg:col-span-7 flex flex-col justify-between h-full gap-4 sm:gap-5">
                 <div>
                   <span className="font-subheading text-xs font-bold text-[#8bd4ff] tracking-wider uppercase mb-2 block">
                     Profil Organisasi
@@ -151,18 +151,18 @@ export default function TentangContent() {
                   </p>
                 </div>
 
-                {/* Explaining Text */}
-                <div className="text-white/90 font-subheading text-sm sm:text-[15px] leading-relaxed space-y-3">
+                {/* Explaining Text — vertically centered so it balances the 3D emblem card */}
+                <div className="flex-1 flex flex-col justify-center text-white/90 font-subheading text-sm sm:text-[15px] lg:text-base leading-relaxed lg:leading-[1.8] space-y-3.5 lg:space-y-4">
                   <p>
-                    <strong>UKMKHD UNAIR</strong> adalah organisasi kemahasiswaan intra-universiter resmi yang menaungi seluruh mahasiswa beragama Hindu di lingkungan Universitas Airlangga. Berdiri secara resmi pada <strong>1 Oktober 1985</strong> melalui Surat Keputusan Rektor Universitas Airlangga Nomor <strong>7343/PT.03.I/O/1985</strong>.
+                    <strong>UKMKHD Universitas Airlangga</strong> adalah sebuah organisasi yang mewadahi seluruh keluarga mahasiswa Hindu di Universitas Airlangga. UKMKHD Universitas Airlangga merupakan suatu organisasi yang bersifat kekeluargaan yang memberikan kontribusi pada mahasiswa Hindu Universitas Airlangga, umat Hindu pada umumnya, dan pada masyarakat luas melalui kegiatan-kegiatan keagamaan, pendidikan, kemanusiaan dan sosial, sesuai dengan ajaran agama Hindu dan Tri Dharma Perguruan Tinggi.
                   </p>
                   <p>
-                    Selama lebih dari empat dekade, UKMKHD UNAIR konsisten mengabdi sebagai wadah pembinaan rohani, penguatan nilai moral, pengembangan intelektual, dan pengasuhan karakter kepemimpinan mahasiswa berlandaskan ajaran luhur <em>Sanatana Dharma</em>.
+                    Unit Kegiatan Mahasiswa Kerohanian Hindu Dharma (UKMKHD) Universitas Airlangga berdiri berdasarkan keputusan Ketua Badan Koordinasi Kemahasiswaan Tgl. <strong>1 Oktober 1985</strong> Nomor: <strong>7343/PT.03.I/O/1985</strong>. Organisasi ini berlandaskan pada Pancasila dan Veda serta berdasarkan kekeluargaan, kerjasama, dan musyawarah mufakat.
                   </p>
                 </div>
 
                 {/* 2 Landasan Utama */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-1 mt-auto">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                   <LiquidGlassCard className="p-4 sm:p-5 !rounded-2xl">
                     <h4 className="font-heading text-base font-bold text-white">Tri Hita Karana</h4>
                     <span className="text-xs font-subheading text-[#8bd4ff] font-semibold block mt-0.5">

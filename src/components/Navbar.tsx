@@ -77,11 +77,11 @@ export default function Navbar() {
               </div>
 
               <div className="flex flex-col">
-                <span className="font-heading text-sm sm:text-base lg:text-lg font-bold tracking-tight text-white leading-tight">
-                  UKMKHD UNAIR 2026
+                <span className="font-heading text-[15px] sm:text-base lg:text-lg font-bold tracking-tight text-white leading-tight">
+                  UKMKHD
                 </span>
-                <span className="font-subheading text-[9px] sm:text-[10px] lg:text-[11px] font-medium text-[#8bd4ff] tracking-wide">
-                  Kabinet Nivaramitra
+                <span className="font-subheading text-[10px] sm:text-[11px] lg:text-xs font-semibold text-[#8bd4ff] tracking-[0.18em] uppercase">
+                  UNAIR
                 </span>
               </div>
             </Link>
@@ -178,7 +178,7 @@ export default function Navbar() {
 
             {/* Compact Footer */}
             <div className="pt-2 text-center border-t border-white/10">
-              <span className="text-[10px] font-subheading text-white/55">
+              <span className="text-[11px] sm:text-xs font-subheading text-white/55">
                 Kabinet Nivaramitra Periode 2026
               </span>
             </div>

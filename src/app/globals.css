@@ -221,10 +221,10 @@ body {
    ============================================================== */
 @keyframes nivaraTextShift {
   0% {
-    background-position: 0% 50%;
+    background-position: 200% 50%;
   }
   100% {
-    background-position: -200% 50%;
+    background-position: 0% 50%;
   }
 }
 
@@ -239,12 +239,15 @@ body {
     #ff4d5a 80%,
     #e02432 100%
   );
-  background-size: 200% 100%;
-  background-repeat: repeat-x;
+  background-size: 200% auto;
+  background-repeat: repeat;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+  color: transparent;
   animation: nivaraTextShift 6s linear infinite;
+  display: inline-block;
+  transform: translateZ(0);
   will-change: background-position;
 }
 

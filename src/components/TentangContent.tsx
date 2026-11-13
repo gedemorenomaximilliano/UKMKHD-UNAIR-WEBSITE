@@ -29,7 +29,7 @@ export default function TentangContent() {
   };
 
   return (
-    <div className="relative isolate min-h-screen pt-24 sm:pt-28 pb-16 sm:pb-20 overflow-hidden bg-[#02121e] text-white">
+    <div className="relative isolate min-h-screen pt-16 sm:pt-18 lg:pt-20 pb-12 sm:pb-16 overflow-hidden bg-[#02121e] text-white">
       {/* Dynamic Animated Canvas Background */}
       <AnimatedBackground />
 
@@ -40,7 +40,7 @@ export default function TentangContent() {
             THE MASTER TOGGLE SWITCHER (True Liquid Glass Pill, Fully Rounded)
             Strictly separates UKMKHD view from Kabinet view
             ============================================================== */}
-        <div className="flex justify-center mb-8 sm:mb-12">
+        <div className="flex justify-center mb-3 sm:mb-4 lg:mb-5">
           <div className="inline-flex items-center p-1 sm:p-1.5 rounded-full bg-white/[0.05] backdrop-blur-2xl border border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] max-w-full">
             
             {/* Toggle Button 1: UKMKHD UNAIR */}
@@ -215,7 +215,7 @@ export default function TentangContent() {
                     />
                   </div>
                   <div className="text-center pt-3.5 mt-auto border-t border-white/10 w-full">
-                    <span className="font-heading text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#e02432] via-[#ff4d5a] to-[#38bdf8]">
+                    <span className="font-heading text-2xl font-black animate-nivara-gradient">
                       NIVARAMITRA
                     </span>
                     <span className="font-subheading text-xs font-semibold text-white/80 block mt-0.5">

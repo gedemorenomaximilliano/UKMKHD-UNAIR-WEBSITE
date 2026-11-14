@@ -118,7 +118,7 @@ export default function ProgramKerjaCatalog({ onSelectProgram }: ProgramKerjaCat
             </button>
 
             {openDropdown === "dept" && (
-              <div className="absolute top-full left-0 mt-1.5 w-48 rounded-2xl bg-white/[0.14] backdrop-blur-2xl border border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.9)] z-50 p-1.5 space-y-1 animate-in fade-in zoom-in-95 duration-150">
+              <div className="absolute top-full left-0 mt-2 w-48 rounded-2xl bg-[#021826]/95 backdrop-blur-2xl border border-white/25 shadow-[0_20px_50px_rgba(0,0,0,0.85),inset_0_1px_1px_rgba(255,255,255,0.2)] z-50 p-1.5 space-y-1 animate-in fade-in zoom-in-95 duration-150">
                 {[
                   { id: "ALL", label: "Semua Dept" },
                   { id: "Proker Utama", label: "Proker Utama (2)" },
@@ -133,10 +133,10 @@ export default function ProgramKerjaCatalog({ onSelectProgram }: ProgramKerjaCat
                       setSelectedDivision("ALL");
                       setOpenDropdown(null);
                     }}
-                    className={`w-full text-left px-3 py-2 rounded-xl text-xs font-subheading font-medium transition-colors ${
+                    className={`w-full text-left px-3 py-2 rounded-xl text-xs font-subheading transition-colors ${
                       selectedDept === dept.id
-                        ? "bg-white/20 text-white font-bold"
-                        : "text-white/75 hover:text-white hover:bg-white/10"
+                        ? "bg-white/20 text-white font-bold border border-white/15 shadow-sm"
+                        : "text-white/85 hover:text-white hover:bg-white/10"
                     }`}
                   >
                     {dept.label}
@@ -166,17 +166,17 @@ export default function ProgramKerjaCatalog({ onSelectProgram }: ProgramKerjaCat
             </button>
 
             {openDropdown === "division" && (
-              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1.5 w-52 rounded-2xl bg-white/[0.14] backdrop-blur-2xl border border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.9)] z-50 p-1.5 max-h-60 overflow-y-auto scrollbar-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden space-y-1 animate-in fade-in zoom-in-95 duration-150">
+              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-52 rounded-2xl bg-[#021826]/95 backdrop-blur-2xl border border-white/25 shadow-[0_20px_50px_rgba(0,0,0,0.85),inset_0_1px_1px_rgba(255,255,255,0.2)] z-50 p-1.5 max-h-60 overflow-y-auto scrollbar-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden space-y-1 animate-in fade-in zoom-in-95 duration-150">
                 <button
                   type="button"
                   onClick={() => {
                     setSelectedDivision("ALL");
                     setOpenDropdown(null);
                   }}
-                  className={`w-full text-left px-3 py-2 rounded-xl text-xs font-subheading font-medium transition-colors ${
+                  className={`w-full text-left px-3 py-2 rounded-xl text-xs font-subheading transition-colors ${
                     selectedDivision === "ALL"
-                      ? "bg-white/20 text-white font-bold"
-                      : "text-white/75 hover:text-white hover:bg-white/10"
+                      ? "bg-white/20 text-white font-bold border border-white/15 shadow-sm"
+                      : "text-white/85 hover:text-white hover:bg-white/10"
                   }`}
                 >
                   Semua Divisi
@@ -191,10 +191,10 @@ export default function ProgramKerjaCatalog({ onSelectProgram }: ProgramKerjaCat
                         setSelectedDivision(div.id);
                         setOpenDropdown(null);
                       }}
-                      className={`w-full text-left px-3 py-2 rounded-xl text-xs font-subheading font-medium transition-colors ${
+                      className={`w-full text-left px-3 py-2 rounded-xl text-xs font-subheading transition-colors ${
                         selectedDivision === div.id
-                          ? "bg-white/20 text-white font-bold"
-                          : "text-white/75 hover:text-white hover:bg-white/10"
+                          ? "bg-white/20 text-white font-bold border border-white/15 shadow-sm"
+                          : "text-white/85 hover:text-white hover:bg-white/10"
                       }`}
                     >
                       {div.label}
@@ -222,7 +222,7 @@ export default function ProgramKerjaCatalog({ onSelectProgram }: ProgramKerjaCat
             </button>
 
             {openDropdown === "type" && (
-              <div className="absolute top-full right-0 mt-1.5 w-44 rounded-2xl bg-white/[0.14] backdrop-blur-2xl border border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.9)] z-50 p-1.5 space-y-1 animate-in fade-in zoom-in-95 duration-150">
+              <div className="absolute top-full right-0 mt-2 w-44 rounded-2xl bg-[#021826]/95 backdrop-blur-2xl border border-white/25 shadow-[0_20px_50px_rgba(0,0,0,0.85),inset_0_1px_1px_rgba(255,255,255,0.2)] z-50 p-1.5 space-y-1 animate-in fade-in zoom-in-95 duration-150">
                 {[
                   { id: "ALL", label: "Semua Tipe" },
                   { id: "Sekali Jalan", label: "Sekali Jalan" },
@@ -235,10 +235,10 @@ export default function ProgramKerjaCatalog({ onSelectProgram }: ProgramKerjaCat
                       setSelectedType(t.id as any);
                       setOpenDropdown(null);
                     }}
-                    className={`w-full text-left px-3 py-2 rounded-xl text-xs font-subheading font-medium transition-colors ${
+                    className={`w-full text-left px-3 py-2 rounded-xl text-xs font-subheading transition-colors ${
                       selectedType === t.id
-                        ? "bg-white/20 text-white font-bold"
-                        : "text-white/75 hover:text-white hover:bg-white/10"
+                        ? "bg-white/20 text-white font-bold border border-white/15 shadow-sm"
+                        : "text-white/85 hover:text-white hover:bg-white/10"
                     }`}
                   >
                     {t.label}

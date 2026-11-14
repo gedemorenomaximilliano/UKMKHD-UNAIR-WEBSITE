@@ -1341,7 +1341,7 @@ export default function KalenderContent() {
 
                 {/* Search Results Dropdown */}
                 {searchQuery.trim() !== "" && (
-                  <div className="absolute top-full mt-2 right-0 w-72 sm:w-80 max-h-64 overflow-y-auto rounded-2xl bg-[#021827]/95 backdrop-blur-2xl border border-white/20 shadow-2xl z-50 p-2 space-y-1.5">
+                  <div className="absolute top-full mt-2 right-0 w-72 sm:w-80 max-h-64 overflow-y-auto rounded-2xl bg-[#021826]/95 backdrop-blur-2xl border border-white/25 shadow-[0_20px_50px_rgba(0,0,0,0.85),inset_0_1px_1px_rgba(255,255,255,0.2)] z-50 p-2 space-y-1.5">
                     <span className="text-[10px] font-subheading font-bold uppercase tracking-wider text-white/50 block px-2 py-1">
                       Hasil Pencarian Tahun {currentYear} ({searchResults.length}):
                     </span>
@@ -1442,7 +1442,7 @@ export default function KalenderContent() {
                     className="fixed inset-0 z-40"
                     onClick={() => setIsCatDropdownOpen(false)}
                   />
-                  <div className="absolute top-full left-0 mt-2 w-48 rounded-2xl bg-[#021827] border border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.9)] z-50 p-1.5 space-y-1 animate-in fade-in zoom-in-95 duration-150">
+                  <div className="absolute top-full left-0 mt-2 w-48 rounded-2xl bg-[#021826]/95 backdrop-blur-2xl border border-white/25 shadow-[0_20px_50px_rgba(0,0,0,0.85),inset_0_1px_1px_rgba(255,255,255,0.2)] z-50 p-1.5 space-y-1 animate-in fade-in zoom-in-95 duration-150">
                     {[
                       { id: "ALL", label: "Semua Kategori", dot: null },
                       { id: "utama", label: "Hari Raya Utama", dot: "bg-[#ff3b4e]" },
@@ -1456,10 +1456,10 @@ export default function KalenderContent() {
                           setSelectedCategory(cat.id as any);
                           setIsCatDropdownOpen(false);
                         }}
-                        className={`w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-subheading font-medium text-left transition-colors ${
+                        className={`w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-subheading text-left transition-colors ${
                           selectedCategory === cat.id
-                            ? "bg-white/20 text-white font-bold"
-                            : "text-white/75 hover:text-white hover:bg-white/10"
+                            ? "bg-white/20 text-white font-bold border border-white/15 shadow-sm"
+                            : "text-white/85 hover:text-white hover:bg-white/10"
                         }`}
                       >
                         {cat.dot ? (
@@ -1506,7 +1506,7 @@ export default function KalenderContent() {
 
               {/* Mobile Search Results Dropdown */}
               {searchQuery.trim() !== "" && (
-                <div className="absolute top-full mt-2 right-0 left-0 max-h-64 overflow-y-auto rounded-2xl bg-[#021827]/98 backdrop-blur-2xl border border-white/20 shadow-2xl z-50 p-2 space-y-1.5">
+                <div className="absolute top-full mt-2 right-0 left-0 max-h-64 overflow-y-auto rounded-2xl bg-[#021826]/95 backdrop-blur-2xl border border-white/25 shadow-[0_20px_50px_rgba(0,0,0,0.85),inset_0_1px_1px_rgba(255,255,255,0.2)] z-50 p-2 space-y-1.5">
                   <span className="text-[10px] font-subheading font-bold uppercase tracking-wider text-white/50 block px-2 py-1">
                     Hasil Pencarian ({searchResults.length}):
                   </span>
